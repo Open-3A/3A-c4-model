@@ -3,13 +3,24 @@
 
 LAYOUT_WITH_LEGEND()
 
-Person(pbc, "Personal Banking Customer", "A customer of the bank, with personal bank accounts.")
-System(ibs, "Internet Banking System", "Allows customers to view information about their bank accounts, and make payments.")
-System_Ext(es, "E-mail system", "The internal Microsoft Exchange e-mail system.")
-System_Ext(mbs, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 3A")
 
-Rel(pbc, ibs, "Uses")
-Rel(es, pbc, "Sends e-mails to")
-Rel(ibs, es, "Sends e-mails", "SMTP")
-Rel(ibs, mbs, "Uses")
+System_Boundary(3a, "Asset Analysis AI (3A)"){
+  System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
+  System(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema")
+  System(ai, "Inteligência Artificial", "Modelo similar com o GPT-3.5 para elaborar os relatórios de investimentos")
+}
+
+System_Ext(mail, "Sistema de e-mail", "SMTP do Gmail")
+
+Rel(user, mobile, "Interage via aplicativo móvel")
+
+Rel(mobile, backend, "Envio de dados de cadastro ou login", "JSON/HTTPS")
+Rel(backend, mobile, "Envio dos dados para a contrução da interface", "JSON/HTTPS")
+
+Rel(backend, mail, "Envia e-mail de confirmação ao usuário")
+
+Rel(backend, ai, "Solicita a criação de um novo relatório de investimento", "JSON/HTTPS")
+Rel(ai, backend, "Envia o relatório", "JSON/HTTPS")
+
 @enduml
