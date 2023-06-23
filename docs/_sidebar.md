@@ -2,3 +2,6 @@
   * [C1 Context](C1%20Context/HOME)
   * [C2 Containers](C2%20Containers/HOME)
   * [C3 Components](C3%20Components/HOME)
+    * [artificial-intelligence](C3%20Components/artificial-intelligence/HOME)
+    * [back-end](C3%20Components/back-end/HOME)
+    * [front-end-mobile](C3%20Components/front-end-mobile/HOME)
