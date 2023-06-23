@@ -5,22 +5,15 @@ LAYOUT_WITH_LEGEND()
 
 Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 3A")
 
-System_Boundary(3a, "Asset Analysis AI (3A)"){
-  System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
-  System(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema")
-  System(ai, "Inteligência Artificial", "Modelo similar com o GPT-3.5 para elaborar os relatórios de investimentos")
-}
+System(3a, "Asset Analysis AI - 3A",  "Plataforma com cursos sobre o mercado financeiro e com uma experiência gamificada. Além disso, após a conclusão de todos os módulos, é liberado uma IA que libera diariamente relatórios de investimentos para auxiliar os investidores nas tomadas de decisão.")
 
-System_Ext(mail, "Sistema de e-mail", "SMTP do Gmail")
+System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
+System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer as informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
+System_Ext(google_finance, "Google Finanças", "Serviço para prover as cotações de ativos da bolsa em tempo real")
 
-Rel(user, mobile, "Interage via aplicativo móvel")
-
-Rel(mobile, backend, "Envio de dados de cadastro ou login", "JSON/HTTPS")
-Rel(backend, mobile, "Envio dos dados para a contrução da interface", "JSON/HTTPS")
-
-Rel(backend, mail, "Envia e-mail de confirmação ao usuário")
-
-Rel(backend, ai, "Solicita a criação de um novo relatório de investimento", "JSON/HTTPS")
-Rel(ai, backend, "Envia o relatório", "JSON/HTTPS")
+Rel(user, 3a, "Usa")
+Rel(3a, mail, "Envia e-mail de confirmação ao usuário")
+Rel(3a, yahoo_finance, "Consome dados de ativos")
+Rel(3a, google_finance, "Obtem cotação")
 
 @enduml
