@@ -6,9 +6,9 @@ LAYOUT_WITH_LEGEND()
 Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 3A")
 
 System_Boundary(3a, "Asset Analysis AI (3A)"){
-  System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
-  System(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema")
-  System(ai, "Inteligência Artificial", "Modelo similar com o GPT-3.5 para elaborar os relatórios de investimentos")
+  Container(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
+  Container(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema")
+  Container(ai, "Inteligência Artificial", "Modelo similar com o GPT-3.5 para elaborar os relatórios de investimentos")
 }
 
 System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
