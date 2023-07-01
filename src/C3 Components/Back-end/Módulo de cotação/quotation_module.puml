@@ -1,0 +1,27 @@
+@startuml Quotation Module
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
+System_Ext(google_finance, "Google Finanças", "Serviço para prover as cotações de ativos da bolsa em tempo real")
+
+ContainerDb_Ext(redis, "Cache", "Redis", "Camada de cache para persistir por 20 min os dados da cotação do Google Finance")
+
+Boundary(quotation_module, "Módulo de cotação", "Java"){
+  Component(quotation_scrapper, "Extração de cotação", "JSoup", "Extrair o preço e variação atual dos principais índices do mercado finaceiro do Google Finance")
+  Component(quotation_api, "API", "Spring Web", "Expor as informações da quotação de um índice via API Rest")
+
+  Boundary(quotation_usescases, "Casos de uso"){
+    Component(get_quotations_usecase, "Obter cotações", "Spring Framework", "Caso de uso para obter os principais índices (IBOV, SMALL, IFIX, S&P500 e Dow Jones)")
+  }
+}
+
+Rel(mobile, quotation_api, "Faz requisição")
+Rel(quotation_scrapper, google_finance, "Extrair dados", "XML/HTTPS")
+Rel(get_quotations_usecase, redis, "Consulta")
+Rel(get_quotations_usecase, quotation_scrapper, "Extrair dados", "Caso não esteja no cache")
+Rel(quotation_api, quotation_usescases, "Executa")
+
+@enduml

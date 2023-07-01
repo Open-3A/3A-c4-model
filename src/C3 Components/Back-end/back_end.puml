@@ -10,10 +10,7 @@ ContainerDb(asset_info_doc, "Documento 'AssetInfo'", "MongoDB", "Banco de dados 
 ContainerDb(user_doc, "Documento 'User'", "MongoDB", "Banco de dados não relacional, porém cada registro tem um atributo 'version' para evitar incosistência ao versionar a API")
 
 Container_Boundary(backend, "Back-end"){
-  Boundary(data_provider, "Data Provider", "Spring Web"){
-    Component(asset_price, "Cotação de ativos", "Disponibilizar a cotação dos principais índices do mercado (IBOV, SMLL, SP500, DJIA) e de ativos com delay de 30 segundos")
-    Component(asset_info, "Informações de ativos", "Spring Data JPA", "Disponibilizar as informações e indicadores de um ativo")
-  }
+  
 
   Boundary(auth, "Autenticação", "Spring Security"){
     Component(login, "Log-in", "Realiza a verificação do e-mail e senha fornecido pelo usuários com os dados salvos no banco de dados")

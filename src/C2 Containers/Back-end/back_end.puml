@@ -28,7 +28,7 @@ Rel(mobile, quotation_module, "Faz requisição", "JSON/HTTPS")
 Rel(quotation_module, redis, "Consulta a cotação")
 Rel(redis, google_finance, "Obtém a página HTML crua da cotação", "XML/HTTPS")
 
-BiRel(products_module, db, "Escrita e leitura")
+BiRel(products_module, db, "Usa")
 BiRel(courses_module, db, "Usa")
 BiRel(reports_module, db, "Usa")
 BiRel(security_module, user_db, "Usa")
