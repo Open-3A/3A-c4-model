@@ -10,46 +10,10 @@ ContainerDb(asset_info_doc, "Documento 'AssetInfo'", "MongoDB", "Banco de dados 
 ContainerDb(user_doc, "Documento 'User'", "MongoDB", "Banco de dados não relacional, porém cada registro tem um atributo 'version' para evitar incosistência ao versionar a API")
 
 Container_Boundary(backend, "Back-end"){
-  
-
   Boundary(auth, "Autenticação", "Spring Security"){
     Component(login, "Log-in", "Realiza a verificação do e-mail e senha fornecido pelo usuários com os dados salvos no banco de dados")
     Component(sign_up, "Sign up", "Realiza a criação da conta do novo usuário e envia um e-mail para confirmação")
     Component(reset_passwd, "Redefinição de senha", "Verifica se o e-mail solicitado existe no banco de dados e envia um e-mail de redefinição de senha")
-  }
-
-  Boundary(courses, "Cursos"){
-    Component(course_api, "API", "Spring Web", "Disponibiliza as informações dos módulos e o conteúdo de cada capítulo no formato JSON")
-    Boundary(course_uses_cases, "Casos de uso"){
-      Component(get_progress, "Obter progresso", "Obter o progresso atual de um determinado usuário a partir do seu ID")
-      Component(get_modules, "Obter os módulos", "Obter (usando Pagination) os módulos e seus repectivos capítulos")
-      Component(get_module_to_continue, "Obter módulo para continuar", "Obter o módulo no qual o usuário estava lendo ou ia começar a ler")
-    }
-    Component(course_service, "Serviço", "Spring Framework", "'Application Service' para executar os casos de uso e fazer o mapeamento das entidades")
-    Component(course_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
-  }
-
-  Boundary(reports, "Relatórios"){
-    Component(report_gateway, "AI Gateway", "Spring Web", "Envia a solicitação de criação de relatórios e os recebe")
-    Component(report_api, "API", "Spring Web", "Expoem os relatórios criados")
-    Component(report_service, "Serviço", "Spring Framework", "'Aplication Service' para executar os casos de uso e fazer o mapeamento das entidades")
-    Component(report_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
-    Boundary(report_use_cases, "Casos de uso"){
-      Component(request_report_creation, "Solitica a criação do relatório", "Envia as funcionalidades desbloqueadas pelo usuário para a criação de relatórios")
-      Component(notify_daily_report, "Notifica sobre o relatório diário", "Notifica o usuário sobre o novo relatório")
-      Component(find_all_report, "Listagem dos relatórios", "Listagem dos relatórios (com Pagination) respeitando os filtros aplicados pelo usuário")
-    }
-  }
-
-  Boundary(products, "Produtos"){
-    Component(product_api, "API", "Spring Web", "Expoem os produtos registrados")
-    Component(product_service, "Serviço", "Spring Framework", "'Aplication Service' para executar os casos de uso e fazer o mapeamento das entidades")
-    Component(product_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
-    Boundary(product_use_cases, "Casos de uso"){
-      Component(find_all_products, "Listagem dos produtos", "Listagem dos produtos (usando Pagination)")
-      Component(edit_product, "Editar produto", "Edição total ou parcial do produto")
-      Component(add_product, "Adicionar produto", "Verificar se o produto já existe, se não salvar no banco de dados")
-    }
   }
 }
 
@@ -57,35 +21,5 @@ Container_Boundary(backend, "Back-end"){
 System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer as informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
 System_Ext(google_finance, "Google Finanças", "Serviço para prover as cotações de ativos da bolsa em tempo real")
 System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.", $sprite="envelope")
-
-' Data Provider Boundary
-Rel(asset_price, google_finance, "Usa", "JSON/HTTPS")
-Rel(asset_info, asset_info_doc, "Usa")
-Rel(asset_info_doc, yahoo_finance, "Usa", "JSON/HTTPS")
-
-' Auth Boundary
-Rel(login, user_doc, "Pega informações de cadastro")
-Rel(sign_up, user_doc, "Salva as informações de cadastro")
-Rel(sign_up, mail, "Envia e-mail de confirmação")
-Rel(reset_passwd, user_doc, "Verifica se e-mail existe")
-Rel(reset_passwd, mail, "Envia um e-mail para redefinição da senha")
-
-' Course Boundary
-Rel(course_api, course_service, "Usa")
-BiRel(course_service, course_mapper, "Usa")
-Rel(course_service, course_uses_cases, "Executa")
-
-' Report Boundary
-Rel(report_api, report_service, "Usa")
-Rel(report_gateway, report_service, "Recebe o relatório do usuário")
-Rel(report_service, report_gateway, "Envia solicitação de criação de relatório")
-BiRel(report_gateway, ai, "Usa", "JSON/HTTPS")
-BiRel(report_service, report_mapper, "usa")
-Rel(report_service, report_use_cases, "Executa")
-
-' Product Boundary
-Rel(product_api, product_service, "Usa")
-BiRel(product_service, product_mapper, "Usa")
-Rel(product_service, product_use_cases, "Executa")
 
 @enduml

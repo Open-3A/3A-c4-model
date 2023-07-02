@@ -1,0 +1,50 @@
+@startuml Report Module
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+System(ai, "Inteligência Artificial", "Modelo similar com o GPT-3.5 para elaborar os relatórios de investimentos")
+System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
+
+Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
+
+Boundary(report_module, "Módulo de relatório"){
+  Component(report_api, "API", "Spring Web", "Expoem os relatórios registrados no banco de dados de um determinado usuário")
+  Component(report_service, "Serviço de aplicação", "Spring Framework", "Contêm as regras de aplicação, executa os casos de uso e faz o mapeamento das entidades")
+  Component(report_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
+  Component(report_gateway, "AI Gateway", "Spring Web", "Envia a solicitação de criação de relatórios")
+
+  Boundary(report_use_cases, "Casos de uso"){
+    Boundary(internal, "Interno da aplicação"){
+      Component(request_report_creation_use_case, "Solicita a criação de relatório", "Spring Framework", "Na solicitação contêm as funcionalidades desbloqueadas pelo usuário para a criação do relatório diário")
+      Component(notify_daily_report, "Notifica sobre o relatório diário", "Spring Framework", "Notifica o usuário sobre o novo relatório")
+      Component(get_unlocked_features_use_case, "Obtêm funcionalidades desbloqueadas", "Spring Framework", "Obtêm as funcionalidades (upgrades) adquiridas na loja pelo usuário")
+    }
+    Boundary(only_admin_investor, "Apenas Investidores e Administradores"){
+      Component(list_reports_use_case, "Listagem dos relatórios", "Spring Framework", "Listagem dos relatórios usando paginação e respeitando os filtros aplicados pelo usuário")
+    }
+  }
+
+  Component(report_repository, "Repositório de relatório", "Spring Data JPA", "Realiza a consulta e inserção de relatórios de usuários")
+  Component(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza apenas a consulta e atualização das funcionalidades desbloqueadas do usuário no banco de dados")
+}
+
+ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional, porém cada registro tem um atributo 'version' para evitar incosistência ao versionar a API")
+ContainerDb(user_db, "Banco de dados de Usuários", "PostgreSQL", "Banco de dados relacional, para salvar as informações do usuário como nome, e-mail, senha, telefone, cargo e último login para realizar as operações de autenticação e autorização")
+
+Rel(security_module, report_api, "Faz requisição", "apenas Investidor")
+Rel(report_api, report_service, "Usa")
+Rel(report_service, report_use_cases, "Executa")
+Rel(report_service, report_mapper, "Mapeia entidades")
+BiRel(request_report_creation_use_case, report_gateway, "Usa")
+Rel(report_gateway, ai, "Faz solicitação", "JSON/HTTPS")
+Rel(ai, report_gateway, "Recebe o relatório", "Plain Text (Markdown)")
+Rel(report_repository, db, "Usa")
+Rel(request_report_creation_use_case, get_unlocked_features_use_case, "Usa")
+Rel(get_unlocked_features_use_case, user_repository, "Consulta dados do usuário")
+Rel(user_repository, user_db, "Usa")
+Rel(notify_daily_report, mail, "Envia e-mail de notificação")
+Rel(list_reports_use_case, report_repository, "Consulta relatórios")
+
+@enduml
