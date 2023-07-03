@@ -1,0 +1,37 @@
+@startuml Security Module
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 3A")
+
+System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
+ContainerDb(user_db, "Banco de dados de Usuários", "PostgreSQL", "Banco de dados relacional, para salvar as informações do usuário como nome, e-mail, senha, telefone, cargo e último login para realizar as operações de autenticação e autorização")
+
+Boundary(security_module, "Módulo de segurança", "Spring Security"){
+  Component(security_api, "API", "Spring Web", "Expoem as informações necessárias do usuário para executar os casos de uso do sistema")
+  Component(security_service, "Serviço de aplicação", "Spring Framework", "Contêm as regras de aplicação, executa os casos de uso e faz o mapeamento das entidades")
+  Component(report_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
+
+  Boundary(security_use_cases, "Casos de uso"){
+    Component(login_use_case, "Log-in", "Spring Framework", "Realiza a verificação do e-mail e senha fornecido pelo usuários com os dados salvos no banco de dados")
+    Component(signup_use_case, "Sign-up", "Spring Framework", "Realiza a criação da conta do novo usuário e envia um e-mail para confirmação")
+    Component(reset_pwd_use_case, "Redefinir senha", "Spring Framework", "Verifica se o e-mail solicitado existe no banco de dados e envia um e-mail de redefinição de senha")
+  }
+
+  Component(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza apenas a consulta e atualização das funcionalidades desbloqueadas do usuário no banco de dados")
+}
+
+Rel(user, security_api, "Faz rrequisição")
+Rel(security_api, security_service, "Usa")
+Rel(security_service, report_mapper, "Mapeia entidades")
+Rel(security_service, security_use_cases, "Executa")
+Rel(user_repository, user_db, "Usa")
+Rel(login_use_case, user_repository, "Consulta dados")
+Rel(signup_use_case, user_repository, "Salva dados")
+Rel(signup_use_case, mail, "Envia e-mail de verificação")
+Rel(reset_pwd_use_case, user_repository, "Verifica se usuário existe")
+Rel(reset_pwd_use_case, mail, "Envia e-mail de redefinição")
+
+@enduml

@@ -8,9 +8,9 @@ System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufr
 System_Ext(google_finance, "Google Finanças", "Serviço para prover as cotações de ativos da bolsa em tempo real")
 
 Container_Boundary(backend, "Back-end"){
+  Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
   Container(products_module, "Módulo de produtos", "Java / Spring Web", "Módulo responsável pela listagem dos produtos e a criação / edição de produtos é liberado apenas para administradores")
   Container(courses_module, "Módulo de cursos", "Java / Spring Web", "Módulo para listagem dos módulos e capítulos e obter o progresso de cada usuário. Para usuários com permissão de administrador, é possível editar e adicionar novos cursos e módulos")
-  Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
   Container(reports_module, "Módulo de relatórios", "Java / Spring Web", "Módulo para listagem dos relatórios de um usuário e solicitação de novos usuários")
   Container(quotation_module, "Módulo de cotação", "Java / Spring Web / JSoup", "Módulo para obter as cotações dos principais índices do mercado financeiro do Google Finance")
 }
