@@ -1,12 +1,45 @@
-**Level 1: System Context diagram**
+## **C1 - Contexto**
 
-A System Context diagram is a good starting point for diagramming and documenting a software system, allowing you to step back and see the big picture. Draw a diagram showing your system as a box in the centre, surrounded by its users and the other systems that it interacts with.
+### **Usuário**
 
-Detail isn't important here as this is your zoomed out view showing a big picture of the system landscape. The focus should be on people (actors, roles, personas, etc) and software systems rather than technologies, protocols and other low-level details. It's the sort of diagram that you could show to non-technical people.
+O usuário seria uma pessoa que usa o aplicativo 3A em um celular Android ou IOS. No sistema, ele pode ter 3 cargos diferentes:
 
-**Scope**: A single software system.
+1. **Estudante**: o cargo de estudante é o cargo padrão quando um usuário se cadastra no sistema.
 
-**Primary elements**: The software system in scope.
-Supporting elements: People (e.g. users, actors, roles, or personas) and software systems (external dependencies) that are directly connected to the software system in scope. Typically these other software systems sit outside the scope or boundary of your own software system, and you don’t have responsibility or ownership of them.
+2. **Investidor**: quando o usuário completa todos os módulos do curso, é atribuído o cargo de **investidor** e então é possível comprar a inteligência artificial para criação de relatórios customizados (Asset Analysis AI) na loja do aplicativo.
 
-**Intended audience**: Everybody, both technical and non-technical people, inside and outside of the software development team.
+3. **Administrador**: o cargo de administrador é atribuído apenas ao criador do projeto [@ImGabreuw](https://github.com/ImGabreuw) que é responsável por configurar as recompensas por conclusão de módulos e capítulos, adição e edição de conteúdos do curso.
+
+### **Asset Analysis AI (3A)**
+
+O projeto _Asset Analysis AI_ (3A) é uma plataforma gamificada que faz uso de inteligência artificial "IA" com objetivo de auxiliar as pessoas em atingirem a estabilidade financeira no longo prazo. Desse modo, esta aplicação tem como objetivo democratizar a educação financeira no qual a gamificação pode tornar o processo de aprendizado mais engajador, favorecendo a retenção de usuários na plataforma. Além disso, a IA pode proporcionar uma ganho de produtividade na seleção de ativos a partir da estratégia de investimento _value investing_ com cálculo de preço teto e sugestão de preço de entrada e saída com base em análise técnica.
+
+### **Sistema de e-mail**
+
+O sistema de e-mail adotado é o Gmail, que utiliza o protocolo Simple Mail Transfer Protocol (SMTP). Essa escolha foi feita devido à integração com o ecossistema Spring, baseado nesse protocolo, especificamente o Spring Email.
+
+O sistema de e-mail é empregado em diversos cenários, tais como:
+
+1. Envio de e-mail de confirmação de conta quando um usuário se cadastra na plataforma, direcionado ao endereço de e-mail fornecido durante o cadastro.
+
+2. Envio de e-mail de redefinição de senha quando um usuário solicita a alteração da mesma, direcionado ao endereço de e-mail especificado durante a solicitação.
+
+3. Caso o usuário opte por receber notificações, é utilizado o sistema de e-mail para enviar essas notificações. Essa opção pode ser habilitada na seção "Perfil" do aplicativo.
+
+### **Google Finanças**
+
+O Google Finanças é uma plataforma online gratuita, fornecida pelo Google, que disponibiliza informações financeiras e recursos relacionados ao mercado de ações. Os usuários podem realizar pesquisas e acompanhar as cotações de ações, índices financeiros e moedas.
+
+A escolha de utilizar o Google Finanças para obter a cotação dos principais índices do mercado financeiro baseou-se na necessidade de realizar solicitações frequentes para atualizar as cotações a cada 20 minutos, uma vez que outros serviços cobram por esse acesso ou impõem restrições rigorosas às consultas desses dados.
+
+Além disso, ao utilizar esse serviço do Google, tem-se a garantia de uma entrega contínua e confiável desses dados, sem falhas ou inconsistências.
+
+### **Yahoo Finanças**
+
+O Yahoo Finanças é uma plataforma online gratuita que fornece informações abrangentes sobre o mercado financeiro, incluindo cotações de ações, índices financeiros, moedas, commodities, gráficos e notícias atualizadas. A plataforma oferece recursos avançados, como análise técnica, rastreamento personalizado de portfólio e insights de mercado. Além disso, disponibiliza informações sobre empresas, dados históricos e dividendos.
+
+A escolha do Yahoo Finanças para fornecer dados para a inteligência artificial na criação de relatórios de investimento se deve à disponibilidade gratuita de informações e dados financeiros de empresas listadas em bolsas. Existem bibliotecas em Python, como o [yFinance](https://pypi.org/project/yfinance/) e o [yahooquery](https://pypi.org/project/yahooquery/), que facilitam a coleta padronizada e normalizada desses dados.
+
+Embora o Yahoo tenha imposto algumas limitações no uso da API do Yahoo Finanças, ainda é uma fonte confiável e atualizada de dados para o treinamento da inteligência artificial e a criação de relatórios para os usuários da plataforma.
+
+Para evitar impactos na IA devido às limitações do Yahoo Finanças, foi adotado o Google Finanças para a coleta de cotações de índices de mercado. Isso garante o bom funcionamento da IA sem prejudicar o uso do serviço do Yahoo.
