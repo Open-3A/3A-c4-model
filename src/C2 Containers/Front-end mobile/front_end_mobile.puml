@@ -1,0 +1,24 @@
+@startuml Front-end Mobile
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(developer, "Desenvolvedor")
+
+Person(ios_user, "Usuário IOS")
+Person(android_user, "Usuário Android")
+
+Container_Boundary(front_end_mobile, "Front-end Mobile"){
+  Container(development_environment, "Ambiente de desenvolvimento", "TypeScript / React Native", "Desenvolvimento do aplicativo com suporte à cross plataform entre Android e IOS")
+  Container(ios, "Versão IOS", "Swift", "Versão nativa IOS gerada a partir do código em React Native")
+  Container(android, "Versão Android", "Java", "Versão nativa Android gerada a partir do código em React Native")
+}
+
+Rel(developer, development_environment, "Desenvolve")
+Rel(development_environment, ios, "Gera")
+Rel(development_environment, android, "Gera")
+Rel(ios_user, ios, "Usa")
+Rel(android_user, android, "Usa")
+
+@enduml
