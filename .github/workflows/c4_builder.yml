@@ -1,0 +1,17 @@
+name: C4 Builder
+
+on:
+  pull_request:
+    types: [open, synchronize]
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: C4Builder
+        uses: clippings/c4builder-action@v1
