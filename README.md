@@ -1,7 +1,3 @@
----
-layout: home
----
-
 # Visão geral
 
 ## Resumo
