@@ -3,6 +3,7 @@ name: Generate PlantUML Diagrams
 on:
   push:
     paths:
+      - '.github/workflows/diagrams.yaml'
       - "**/*.puml"
 
 jobs:
