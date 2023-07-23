@@ -25,14 +25,13 @@ jobs:
 
       - name: Generate Diagrams
         run: |
-          # Change 'diagrams/' to your folder containing PlantUML files
-          java -jar plantuml-1.2023.10.jar -v -tsvg -o ./assets/diagrams/ "$(find . -type f -name "*.puml")"
+          java -jar plantuml-1.2023.10.jar -v -tsvg -o ./assets "$(find . -type f -name "*.puml")"
 
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add -A
+          git add -A "*.svg"
           git diff-index --quiet HEAD || git commit -m "Auto-generated PlantUML diagrams" --author "GitHub Action <action@github.com>"
 
       - name: Push changes
