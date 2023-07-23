@@ -1,4 +1,6 @@
-# 3A - Asset Analysis AI
+---
+layout: home
+---
 
 # Visão geral
 
@@ -10,7 +12,7 @@ Este projeto tem por objetivo desenvolver uma ferramenta, denominada Asset Analy
 
 Esse projeto tem como objetivo, democratizar a educação financeira no Brasil que está presente em uma minoria na sociedade, conforme mostra a figura abaixo. Dessa maneira, reduzir o número de devedores no país e proporcioná-los uma vida mais estável por meio dos investimentos.
 
-![](./endividamento_de_familias.png)
+![](./assets/endividamento_de_familias.png)
 
 Além disso, a plataforma é responsável por guiar o investidor no processo de aprendizado sobre mercado financeiro a partir de uma experiência gamificada e com isso favorecer uma maior retenção de usuários na plataforma.
 
@@ -24,15 +26,15 @@ A educação financeira está presente apenas em uma parcela extremamente pequen
 
 Segundo uma pesquisa realizado em 2022 pela ANBIMA, 5.5% da população investem em alguma aplicação financeira, conforme a figura abaixo: 
 
-![](./pesquisa-2022-anbima.png)
+![](./assets/pesquisa-2022-anbima.png)
 
 Um dado que chama atenção é o número de investidores, cerca de 23%, que utilizam a poupança como principal forma de rentabilizar seu dinheiro. Essa classe de ativo apresenta rentabilidade inferior ao IPCA, ou seja, a inflação reduz o poder de compra das pessoas no longo prazo, como é possível verificar na figura abaixo:
 
-![](./Rentabilidade-Real-da-Poupanca-x-Tesouro-Direto.jpg)
+![](./assets/Rentabilidade-Real-da-Poupanca-x-Tesouro-Direto.jpg)
 
 Essas estatísticas são preocupantes para a atual e futuras gerações, uma vez que a Previdência Social contabilizou, em 2022, um déficit de R\$ 261,2 bilhões de reais aponta R7. O INSS está cada vez mais próxima de quebrar devido a inversão da pirâmide etária no país e a má gestão do Governo com manobras políticas. Com isso, é consenso da maioria, segundo Luiz Sacchetto, que é muito provável que as próximas gerações não terão o auxilio financeiro do Estado para a aposentadoria o que impactarão cerca de 55% dos brasileiros dependentes desse sistema para se bancar, conforme mostra a figura abaixo.
 
-![](./impactos-fim-inss.png)
+![](./assets/impactos-fim-inss.png)
 
 Ademais, cerca de 30% dos entrevistados afirmam consultar amigos e/ou familiares ao investir. Tal dado é preocupante, pois eles foram apontados pela BBC Brasil como principais meio de propagação de notícias falsas no país. Desse modos, esses investidores estão sujeitos às notícias, com um tom exagerado de pessimismo, feitos pela mídia o que pode afetar as tomadas de decisões de pessoas iniciando no mercado financeiro.
 
@@ -100,7 +102,7 @@ Sendo assim, o estágio de desenvolvimento do projeto é dividido em quatro etap
 
 O projeto deve manter o seguinte cronograma de atividades:
 
-![](./tabela-cronograma-de-atividades.png)
+![](./assets/tabela-cronograma-de-atividades.png)
 
 ## Cenário de Aplicação e Impactos
 
