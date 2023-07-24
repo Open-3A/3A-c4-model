@@ -3,7 +3,7 @@ name: Generate PlantUML Diagrams
 on:
   push:
     paths:
-      - '.github/workflows/diagrams.yaml'
+      - ".github/workflows/diagrams.yaml"
       - "**/*.puml"
 
 jobs:
@@ -20,14 +20,12 @@ jobs:
       - name: Install Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'zulu'
+          distribution: "zulu"
           java-version: "11"
 
       - name: Generate Diagrams
         run: |
-          for file in $(find . -type f -name "*.puml"); do
-            java -jar plantuml-1.2023.10.jar -v -tsvg -o "." "$file"
-          done
+          java -jar plantuml-1.2023.10.jar -v -tsvg "**.puml"
 
       - name: Commit changes
         run: |
