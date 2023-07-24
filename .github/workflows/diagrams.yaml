@@ -25,7 +25,9 @@ jobs:
 
       - name: Generate Diagrams
         run: |
-          java -jar plantuml-1.2023.10.jar -v -tsvg -o ./assets "$(find . -type f -name "*.puml")"
+          for file in $(find . -type f -name "*.puml"); do
+            java -jar plantuml-1.2023.10.jar -v -tsvg -o "." "$file"
+          done
 
       - name: Commit changes
         run: |
