@@ -16,14 +16,14 @@ Boundary(security_module, "Módulo de segurança", "Spring Security"){
 
   Boundary(security_use_cases, "Casos de uso"){
     Component(login_use_case, "Log-in", "Spring Framework", "Realiza a verificação do e-mail e senha fornecido pelo usuários com os dados salvos no banco de dados")
-    Component(signup_use_case, "Sign-up", "Spring Framework", "Realiza a criação da conta do novo usuário e envia um e-mail para confirmação")
+    Component(signup_use_case, "Cadastro", "Spring Framework", "Realiza a criação da conta do novo usuário e envia um e-mail para confirmação")
     Component(reset_pwd_use_case, "Redefinir senha", "Spring Framework", "Verifica se o e-mail solicitado existe no banco de dados e envia um e-mail de redefinição de senha")
   }
 
   Component(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza apenas a consulta e atualização das funcionalidades desbloqueadas do usuário no banco de dados")
 }
 
-Rel(user, security_api, "Faz rrequisição")
+Rel(user, security_api, "Faz requisição")
 Rel(security_api, security_service, "Usa")
 Rel(security_service, report_mapper, "Mapeia entidades")
 Rel(security_service, security_use_cases, "Executa")

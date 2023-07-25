@@ -11,7 +11,7 @@ ContainerDb_Ext(redis, "Cache", "Redis", "Camada de cache para persistir por 20 
 
 Boundary(quotation_module, "Módulo de cotação", "Java"){
   Component(quotation_scrapper, "Extração de cotação", "JSoup", "Extrair o preço e variação atual dos principais índices do mercado finaceiro do Google Finance")
-  Component(quotation_api, "API", "Spring Web", "Expor as informações da quotação de um índice via API Rest")
+  Component(quotation_api, "API", "Spring Web", "Expor as informações da cotação de um índice via API Rest")
 
   Boundary(quotation_usescases, "Casos de uso"){
     Component(get_quotations_usecase, "Obter cotações", "Spring Framework", "Caso de uso para obter os principais índices (IBOV, SMALL, IFIX, S&P500 e Dow Jones)")

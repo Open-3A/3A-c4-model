@@ -20,6 +20,8 @@ Boundary(course_module, "Módulo de curso", "Java"){
     Boundary(only_admins, "Apenas adminstradores"){
       Component(add_course_module_use_case, "Adicionar módulo", "Spring Framework", "Salvar novo módulo do curso no banco de dados")
       Component(add_chapter_use_case, "Adicionar capítulo", "Spring Framework", "Salvar novo capítulo de um determinado módulo no banco de dados")
+      Component(edit_module_use_case, "Editar módulo", "Spring Framework", "Edição total ou parcial nas informações do módulo")
+      Component(edit_chapter_use_case, "Editar capítulo", "Spring Framework", "Edição total ou parcial nas informações do capítulo")
     }
   }
 
@@ -40,6 +42,8 @@ Rel(get_user_progress_use_case, user_repository, "Obtém progresso")
 Rel(get_chapter_to_continue_use_case, user_repository, "Obtém capítulo")
 Rel(add_course_module_use_case, course_repository, "Salva módulo")
 Rel(add_chapter_use_case, course_repository, "Salva capítulo")
+Rel(edit_module_use_case, course_repository, "Salvar alterações")
+Rel(edit_chapter_use_case, course_repository, "Salvar alterações")
 Rel(finish_reading_use_case, user_repository, "Atualiza informações")
 Rel(user_repository, user_db, "Usa")
 

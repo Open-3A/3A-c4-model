@@ -7,7 +7,7 @@ LAYOUT_WITH_LEGEND()
 Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
 
 Boundary(product_module, "Módulo de produto"){
-  Component(product_api, "API", "Spring Web", "Expoem os produtos registrados")
+  Component(product_api, "API", "Spring Web", "Expoem os produtos registrados via API Rest")
   Component(product_service, "Serviço de aplicação", "Spring Framework", "Contêm as regras de aplicação, executa os casos de uso e faz o mapeamento das entidades")
   Component(product_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
 

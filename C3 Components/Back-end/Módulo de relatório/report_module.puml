@@ -4,7 +4,7 @@
 
 LAYOUT_WITH_LEGEND()
 
-System(ai, "Inteligência Artificial", "Modelo similar com o GPT-3.5 para elaborar os relatórios de investimentos")
+System(ai, "Inteligência Artificial", "Modelo similar ao GPT-3.5 para elaborar os relatórios de investimentos")
 System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
 
 Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
@@ -37,7 +37,7 @@ Rel(security_module, report_api, "Faz requisição", "apenas Investidor")
 Rel(report_api, report_service, "Usa")
 Rel(report_service, report_use_cases, "Executa")
 Rel(report_service, report_mapper, "Mapeia entidades")
-BiRel(request_report_creation_use_case, report_gateway, "Usa")
+Rel(request_report_creation_use_case, report_gateway, "Usa")
 Rel(report_gateway, ai, "Faz solicitação", "JSON/HTTPS")
 Rel(ai, report_gateway, "Recebe o relatório", "Plain Text (Markdown)")
 Rel(report_repository, db, "Usa")
