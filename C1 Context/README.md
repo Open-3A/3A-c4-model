@@ -1,4 +1,6 @@
-## **C1 - Contexto**
+# C1 - Contexto
+
+![](./Context.svg)
 
 ### **Usuário**
 
