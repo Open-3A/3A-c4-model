@@ -4,7 +4,7 @@
 
 ## Caso de usos
 
-### Obter Progresso do Usuário
+### Obter progresso do usuário
 
 ```mermaid
 sequenceDiagram
@@ -13,15 +13,12 @@ sequenceDiagram
     participant course_service as Serviço de Aplicação de Curso
     participant get_user_progress_use_case as Caso de Uso - Obter Progresso de Usuário
     participant user_repository as Repositório de Usuário
-    participant db as Banco de dados <br/> de Usuário
 
-    mobile->>course_api: Faz requisição
+    mobile->>course_api: Faz requisição GET
     course_api->>course_service: Usa
-    course_service->>get_user_progress_use_case: Executa
+    course_service->>get_user_progress_use_case: Executa caso de uso
     alt usuário existe
       get_user_progress_use_case->>user_repository: Consulta o progresso do usuário
-      user_repository->>db: Executa a query
-      db->>user_repository: Retorna o resultado da query
       user_repository->>get_user_progress_use_case: Mapeia o resultado para <br/> a entidade Progresso
       get_user_progress_use_case->>course_service: Resposta com progresso
       course_service->>course_api: Resposta com progresso
@@ -33,7 +30,7 @@ sequenceDiagram
     end
 ```
 
-### Obter Conteúdo do Curso:
+### Obter conteúdo do curso:
 
 ```mermaid
 sequenceDiagram
@@ -42,41 +39,38 @@ sequenceDiagram
     participant course_service as Serviço de Aplicação de Curso
     participant get_course_content_use_case as Caso de Uso - Obter Conteúdo do Curso
     participant course_repository as Repositório de Curso
-    participant db as Banco de Dados (MongoDB)
 
-    user->>course_api: Faz requisição (com JWT)
+    user->>course_api: Faz requisição GET
     course_api->>course_service: Usa
-    course_service->>get_course_content_use_case: Executa
-    get_course_content_use_case->>course_repository: Consulta dados
-    course_repository->>db: Usa
-    db-->>course_repository: Resposta com dados do curso
-    course_repository-->>get_course_content_use_case: Resposta com dados do curso
-    get_course_content_use_case-->>course_service: Resposta com dados do curso
-    course_service-->>course_api: Resposta com dados do curso
-    course_api-->>user: Resposta com dados do curso
+    course_service->>get_course_content_use_case: Executa caso de uso
+    get_course_content_use_case->>course_repository: Consulta dados dos módulos e capítulos
+    course_repository->>get_course_content_use_case: Resposta com dados do curso
+    get_course_content_use_case->>course_service: Resposta com dados do curso
+    course_service->>course_api: Resposta com dados do curso
+    course_api->>user: Resposta com dados do curso em JSON
 ```
 
-### Obter Capítulo em Andamento:
+### Obter capítulo em andamento:
 
 ```mermaid
 sequenceDiagram
-    participant user as Usuário
+    participant frontend as Front-end
     participant course_api as API de Curso
     participant course_service as Serviço de Aplicação de Curso
     participant get_chapter_to_continue_use_case as Caso de Uso - Obter Capítulo em Andamento
     participant user_repository as Repositório de Usuário
 
-    user->>course_api: Faz requisição (com JWT)
+    frontend->>course_api: Faz requisição GET
     course_api->>course_service: Usa
-    course_service->>get_chapter_to_continue_use_case: Executa
-    get_chapter_to_continue_use_case->>user_repository: Obtém capítulo
-    user_repository-->>get_chapter_to_continue_use_case: Resposta com capítulo em andamento
-    get_chapter_to_continue_use_case-->>course_service: Resposta com capítulo em andamento
-    course_service-->>course_api: Resposta com capítulo em andamento
-    course_api-->>user: Resposta com capítulo em andamento
+    course_service->>get_chapter_to_continue_use_case: Executa caso de uso
+    get_chapter_to_continue_use_case->>user_repository: Obtém as informações do <br/> capítulo em andamento
+    user_repository->>get_chapter_to_continue_use_case: Resposta com capítulo em andamento
+    get_chapter_to_continue_use_case->>course_service: Resposta com capítulo em andamento
+    course_service->>course_api: Resposta com capítulo em andamento
+    course_api->>frontend: Resposta com capítulo em andamento em JSON
 ```
 
-### Concluir Leitura:
+### Concluir leitura:
 
 ```mermaid
 sequenceDiagram
@@ -86,17 +80,17 @@ sequenceDiagram
     participant finish_reading_use_case as Caso de Uso - Concluir Leitura
     participant user_repository as Repositório de Usuário
 
-    user->>course_api: Faz requisição (com JWT)
+    user->>course_api: Faz requisição PATCH
     course_api->>course_service: Usa
     course_service->>finish_reading_use_case: Executa
     finish_reading_use_case->>user_repository: Atualiza informações
-    user_repository-->>finish_reading_use_case: Resposta com atualizações
-    finish_reading_use_case-->>course_service: Resposta com atualizações
-    course_service-->>course_api: Resposta com atualizações
-    course_api-->>user: Resposta com atualizações
+    user_repository->>finish_reading_use_case: Resposta com sucesso
+    finish_reading_use_case->>course_service: Resposta com sucesso
+    course_service->>course_api: Resposta com sucesso
+    course_api->>user: Resposta com sucesso
 ```
 
-### Adicionar Módulo (Apenas Administradores):
+### Adicionar módulo (Apenas Administradores):
 
 ```mermaid
 sequenceDiagram
@@ -105,18 +99,15 @@ sequenceDiagram
     participant course_service as Serviço de Aplicação de Curso
     participant add_course_module_use_case as Caso de Uso - Adicionar Módulo
     participant course_repository as Repositório de Curso
-    participant db as Banco de Dados (MongoDB)
 
-    admin->>course_api: Faz requisição (com JWT)
+    admin->>course_api: Faz requisição POST
     course_api->>course_service: Usa
-    course_service->>add_course_module_use_case: Executa
-    add_course_module_use_case->>course_repository: Salva módulo
-    course_repository->>db: Usa
-    db-->>course_repository: Confirmação de salvamento
-    course_repository-->>add_course_module_use_case: Resposta de sucesso
-    add_course_module_use_case-->>course_service: Resposta de sucesso
-    course_service-->>course_api: Resposta de sucesso
-    course_api-->>admin: Resposta de sucesso
+    course_service->>add_course_module_use_case: Executa caso de uso
+    add_course_module_use_case->>course_repository: Salva novo módulo
+    course_repository->>add_course_module_use_case: Resposta de sucesso
+    add_course_module_use_case->>course_service: Resposta de sucesso
+    course_service->>course_api: Resposta de sucesso
+    course_api->>admin: Resposta de sucesso
 ```
 
 ### Adicionar Capítulo (Apenas Administradores):
@@ -128,18 +119,15 @@ sequenceDiagram
     participant course_service as Serviço de Aplicação de Curso
     participant add_chapter_use_case as Caso de Uso - Adicionar Capítulo
     participant course_repository as Repositório de Curso
-    participant db as Banco de Dados (MongoDB)
 
-    admin->>course_api: Faz requisição (com JWT)
+    admin->>course_api: Faz requisição PATCH
     course_api->>course_service: Usa
-    course_service->>add_chapter_use_case: Executa
-    add_chapter_use_case->>course_repository: Salva capítulo
-    course_repository->>db: Usa
-    db-->>course_repository: Confirmação de salvamento
-    course_repository-->>add_chapter_use_case: Resposta de sucesso
-    add_chapter_use_case-->>course_service: Resposta de sucesso
-    course_service-->>course_api: Resposta de sucesso
-    course_api-->>admin: Resposta de sucesso
+    course_service->>add_chapter_use_case: Executa caso de uso
+    add_chapter_use_case->>course_repository: Adiciona capítulo no <br/> respectivo módulo
+    course_repository->>add_chapter_use_case: Resposta de sucesso
+    add_chapter_use_case->>course_service: Resposta de sucesso
+    course_service->>course_api: Resposta de sucesso
+    course_api->>admin: Resposta de sucesso
 ```
 
 ### Editar Módulo (Apenas Administradores):
@@ -151,18 +139,15 @@ sequenceDiagram
     participant course_service as Serviço de Aplicação de Curso
     participant edit_module_use_case as Caso de Uso - Editar Módulo
     participant course_repository as Repositório de Curso
-    participant db as Banco de Dados (MongoDB)
 
-    admin->>course_api: Faz requisição (com JWT)
+    admin->>course_api: Faz requisição PATCH OU PUT
     course_api->>course_service: Usa
-    course_service->>edit_module_use_case: Executa
-    edit_module_use_case->>course_repository: Salvar alterações
-    course_repository->>db: Usa
-    db-->>course_repository: Confirmação de salvamento
-    course_repository-->>edit_module_use_case: Resposta de sucesso
-    edit_module_use_case-->>course_service: Resposta de sucesso
-    course_service-->>course_api: Resposta de sucesso
-    course_api-->>admin: Resposta de sucesso
+    course_service->>edit_module_use_case: Executa caso de uso
+    edit_module_use_case->>course_repository: Salva alterações
+    course_repository->>edit_module_use_case: Resposta de sucesso
+    edit_module_use_case->>course_service: Resposta de sucesso
+    course_service->>course_api: Resposta de sucesso
+    course_api->>admin: Resposta de sucesso
 ```
 
 Na edição de um módulo, o front-end é responsável por realizar a solicitação `PUT` ou `PATCH`, dependendo das informações que foram alteradas. Em outras palavras, se o usuário tiver modificado todas as informações no formulário de edição do módulo, o front-end enviará uma solicitação `PUT`. Caso contrário, especificará apenas os campos que foram alterados utilizando o método `PATCH`.
@@ -178,18 +163,15 @@ sequenceDiagram
     participant course_service as Serviço de Aplicação de Curso
     participant edit_chapter_use_case as Caso de Uso - Editar Capítulo
     participant course_repository as Repositório de Curso
-    participant db as Banco de Dados (MongoDB)
 
-    admin->>course_api: Faz requisição (com JWT)
+    admin->>course_api: Faz requisição PUT ou PATCH
     course_api->>course_service: Usa
-    course_service->>edit_chapter_use_case: Executa
-    edit_chapter_use_case->>course_repository: Salvar alterações
-    course_repository->>db: Usa
-    db-->>course_repository: Confirmação de salvamento
-    course_repository-->>edit_chapter_use_case: Resposta de sucesso
-    edit_chapter_use_case-->>course_service: Resposta de sucesso
-    course_service-->>course_api: Resposta de sucesso
-    course_api-->>admin: Resposta de sucesso
+    course_service->>edit_chapter_use_case: Executa caso de uso
+    edit_chapter_use_case->>course_repository: Salva alterações
+    course_repository->>edit_chapter_use_case: Resposta de sucesso
+    edit_chapter_use_case->>course_service: Resposta de sucesso
+    course_service->>course_api: Resposta de sucesso
+    course_api->>admin: Resposta de sucesso
 ```
 
 Na edição de um capítulo, o front-end é responsável por realizar a solicitação `PUT` ou `PATCH`, dependendo das informações que foram alteradas. Em outras palavras, se o usuário tiver modificado todas as informações no formulário de edição do capítulo, o front-end enviará uma solicitação `PUT`. Caso contrário, especificará apenas os campos que foram alterados utilizando o método `PATCH`.
