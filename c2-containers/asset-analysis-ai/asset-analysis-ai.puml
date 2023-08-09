@@ -1,0 +1,25 @@
+@startuml asset-analysis-ai
+
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+System(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema", $sprite="java")
+System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer as informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
+
+Container_Boundary(asset_analysis_ai, "Asset Analysis AI"){
+  Container_Ext(riskfolio_lib, "Riskfolio-Lib", "Python", "Otimização de carteira de investimento e alocação estratégica de ativos Quantitativos")
+  Container(model, "Modelo de ajuste de métricas", "Python", "Modelo para ajustar as métricas conforme o perfil do investidor para serem utilizar no Riskfolio-Lib")
+  Container(api, "API", "Python", "API responsável por receber as requisições de outros serviços do sistema e disponibilizar relatórios no formato PDF")
+}
+
+Rel(backend, api, "Solicitação de relatório")
+Rel(api, model, "Envia os dados do usuário")
+Rel(model, riskfolio_lib, "Envia as métricas e informações da carteira do usuário")
+Rel(riskfolio_lib, api, "Envia relatório")
+Rel(api, backend, "Envia relatório no formato PDF", "Event Stream")
+Rel(riskfolio_lib, yahoo_finance, "Coleta de dados financeiros")
+Rel(model, yahoo_finance, "Coleta de dados financeiros")
+
+
+@enduml

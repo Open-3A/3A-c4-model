@@ -6,10 +6,10 @@ LAYOUT_WITH_LEGEND()
 
 Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 3A")
 
-System_Boundary(3a, "Asset Analysis AI (3A)"){
+System_Boundary(3a, "3A"){
   System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
   System(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema", $sprite="java")
-  System(ai, "Inteligência Artificial", "Modelo similar com o GPT-3.5 para elaborar os relatórios de investimentos")
+  System(ai, "Asset Analysis AI", "Modelo responsável por calcular métricas de investimento e elaborar os relatórios.")
 }
 
 System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
@@ -21,6 +21,6 @@ BiRel(mobile, backend, "Usa", "JSON/HTTPS")
 Rel(backend, mail, "Envia e-mail de confirmação e redefinição ao usuário")
 Rel(backend, google_finance, "Obtém cotação")
 Rel(backend, ai, "Solicita criação de relatório")
-Rel(ai, backend, "Retorna relatório criado")
+Rel(ai, backend, "Retorna relatório", "em PDF")
 Rel(ai, yahoo_finance, "Obtêm dados de ativos")
 @enduml
