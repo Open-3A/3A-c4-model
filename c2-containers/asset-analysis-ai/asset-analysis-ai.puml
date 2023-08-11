@@ -13,7 +13,7 @@ Container_Boundary(asset_analysis_ai, "Asset Analysis AI"){
   Container(api, "API", "Python", "API responsável por receber as requisições de outros serviços do sistema e disponibilizar relatórios no formato PDF")
 }
 
-Rel(backend, api, "Solicitação de relatório")
+Rel(backend, api, "Solicita relatório")
 Rel(api, model, "Envia os dados do usuário")
 Rel(model, riskfolio_lib, "Envia as métricas e informações da carteira do usuário")
 Rel(riskfolio_lib, api, "Envia relatório")

@@ -8,7 +8,7 @@ Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 
 System_Boundary(3a, "Asset Analysis AI (3A)"){
   Container(mobile, "Front-end mobile", "TypeScript / React Native", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
   Container(backend, "Back-end", "Java / Spring", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema", $sprite="java")
-  Container(ai, "Inteligência Artificial", "Python / TensorFlow", "Modelo similar ao GPT-3.5 para elaborar os relatórios de investimentos")
+  Container(ai, "Asset Analysis AI", "Python", "Modelo responsável por calcular métricas de investimento e elaborar os relatórios.")
 }
 
 System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.", $sprite="envelope")
