@@ -4,74 +4,85 @@
 
 ## Casos de uso
 
-### Log-in (Login):
+### Log-in
 
 ```mermaid
 sequenceDiagram
-    participant user as Usuário
-    participant security_api as API de Segurança
-    participant security_service as Serviço de Aplicação de Segurança
-    participant login_use_case as Caso de Uso - Log-in (Login)
-    participant user_repository as Repositório de Usuário
-    participant user_db as Banco de Dados de Usuários
+    participant User as Usuário
+    participant SecurityAPI as API de Segurança
+    participant SecurityFilters as Filtros de Segurança
+    participant SecurityControllers as Controladores
+    participant SecurityService as Serviço de Aplicação
+    participant UserRepository as Repositório de Usuário
+    participant UserDB as Banco de Dados de Usuários
 
-    user->>security_api: Faz requisição
-    security_api->>security_service: Usa
-    security_service->>login_use_case: Executa
-    login_use_case->>user_repository: Consulta dados
-    user_repository->> user_db: Usa
-    user_db-->>user_repository: Resposta com dados do usuário
-    user_repository-->>login_use_case: Resposta com dados do usuário
-    login_use_case-->>security_service: Resposta com dados do usuário
-    security_service-->>security_api: Resposta com dados do usuário
-    security_api-->>user: Resposta com dados do usuário
+    User->>SecurityAPI: Requisição de Log-in
+    SecurityAPI->>SecurityFilters: Aplica Filtros
+    SecurityFilters->>SecurityControllers: Envia para Controladores
+    SecurityControllers->>SecurityService: Executa Log-in
+    SecurityService->>UserRepository: Consulta dados do usuário
+    UserRepository->>UserDB: Consulta no banco
+    UserDB-->>UserRepository: Retorna dados do usuário
+    UserRepository-->>SecurityService: Retorna dados do usuário
+    SecurityService-->>SecurityControllers: Retorna resultado do Log-in
+    SecurityControllers-->>SecurityFilters: Retorna resposta ao usuário
+    SecurityFilters-->>SecurityAPI: Retorna resposta ao usuário
+    SecurityAPI-->>User: Retorna resposta ao usuário
 ```
 
-### Cadastro (Sign-up):
+### Cadastro
 
 ```mermaid
 sequenceDiagram
-    participant user as Usuário
-    participant security_api as API de Segurança
-    participant security_service as Serviço de Aplicação de Segurança
-    participant signup_use_case as Caso de Uso - Cadastro (Sign-up)
-    participant user_repository as Repositório de Usuário
-    participant user_db as Banco de Dados de Usuários
-    participant mail as Sistema de E-mail
+    participant User as Usuário
+    participant SecurityAPI as API de Segurança
+    participant SecurityFilters as Filtros de Segurança
+    participant SecurityControllers as Controladores
+    participant SecurityService as Serviço de Aplicação
+    participant UserRepository as Repositório de Usuário
+    participant UserDB as Banco de Dados de Usuários
+    participant MailSystem as Sistema de E-mail
 
-    user->>security_api: Faz requisição
-    security_api->>security_service: Usa
-    security_service->>signup_use_case: Executa
-    signup_use_case->>user_repository: Salva dados
-    user_repository->>user_db: Usa
-    user_db-->>user_repository: Confirmação de salvamento
-    signup_use_case->>mail: Envia e-mail de verificação
-    mail-->>signup_use_case: Confirmação de envio
-    signup_use_case-->>security_service: Resposta de sucesso
-    security_service-->>security_api: Resposta de sucesso
-    security_api-->>user: Resposta de sucesso
+    User->>SecurityAPI: Requisição de Cadastro
+    SecurityAPI->>SecurityFilters: Aplica Filtros
+    SecurityFilters->>SecurityControllers: Envia para Controladores
+    SecurityControllers->>SecurityService: Executa Cadastro
+    SecurityService->>UserRepository: Salva dados do usuário
+    UserRepository->>UserDB: Salva no banco
+    UserRepository->>SecurityService: Retorna resultado do Cadastro
+    SecurityService->>MailSystem: Envia e-mail de verificação
+    MailSystem-->>SecurityService: Confirmação de envio
+    SecurityService-->>SecurityControllers: Retorna resultado do Cadastro
+    SecurityControllers-->>SecurityFilters: Retorna resposta ao usuário
+    SecurityFilters-->>SecurityAPI: Retorna resposta ao usuário
+    SecurityAPI-->>User: Retorna resposta ao usuário
 ```
 
-### Redefinir Senha (Reset Password):
+### Redefinir Senha
 
 ```mermaid
 sequenceDiagram
-    participant user as Usuário
-    participant security_api as API de Segurança
-    participant security_service as Serviço de Aplicação de Segurança
-    participant reset_pwd_use_case as Caso de Uso - Redefinir Senha (Reset Password)
-    participant user_repository as Repositório de Usuário
-    participant user_db as Banco de Dados de Usuários
-    participant mail as Sistema de E-mail
+    participant User as Usuário
+    participant SecurityAPI as API de Segurança
+    participant SecurityFilters as Filtros de Segurança
+    participant SecurityControllers as Controladores
+    participant SecurityService as Serviço de Aplicação
+    participant UserRepository as Repositório de Usuário
+    participant UserDB as Banco de Dados de Usuários
+    participant MailSystem as Sistema de E-mail
 
-    user->>security_api: Faz requisição
-    security_api->>security_service: Usa
-    security_service->>reset_pwd_use_case: Executa
-    reset_pwd_use_case->>user_repository: Verifica se usuário existe
-    user_repository-->>reset_pwd_use_case: Resposta de existência do usuário
-    reset_pwd_use_case->>mail: Envia e-mail de redefinição
-    mail-->>reset_pwd_use_case: Confirmação de envio
-    reset_pwd_use_case-->>security_service: Resposta de sucesso
-    security_service-->>security_api: Resposta de sucesso
-    security_api-->>user: Resposta de sucesso
+    User->>SecurityAPI: Requisição de Redefinir Senha
+    SecurityAPI->>SecurityFilters: Aplica Filtros
+    SecurityFilters->>SecurityControllers: Envia para Controladores
+    SecurityControllers->>SecurityService: Executa Redefinir Senha
+    SecurityService->>UserRepository: Verifica usuário
+    UserRepository->>UserDB: Consulta no banco
+    UserDB-->>UserRepository: Retorna dados do usuário
+    UserRepository->>SecurityService: Retorna resultado da verificação
+    SecurityService->>MailSystem: Envia e-mail de redefinição
+    MailSystem-->>SecurityService: Confirmação de envio
+    SecurityService-->>SecurityControllers: Retorna resultado da Redefinição
+    SecurityControllers-->>SecurityFilters: Retorna resposta ao usuário
+    SecurityFilters-->>SecurityAPI: Retorna resposta ao usuário
+    SecurityAPI-->>User: Retorna resposta ao usuário
 ```
