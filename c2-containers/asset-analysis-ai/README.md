@@ -9,9 +9,9 @@
 
 ## Visão geral
 
-|    IBOV    |   IFIX   |  S&P500  | Dow Jones | Dólar | Euro |
-| :--------: | :------: | :------: | :-------: | :---: | :--: |
-| 117.001,84 | 3.213,95 | 4.478,55 | 35.245,98 | 4,95  | 5,41 |
+|    IBOV    | SMALL  |   IFIX   |  S&P500  | Dow Jones | Dólar | Euro |
+| :--------: | :----: | :------: | :------: | :-------: | :---: | :--: |
+| 117.001,84 | 2.250 | 3.213,95 | 4.478,55 | 35.245,98 | 4,95  | 5,41 |
 
 Gráfico de setor para representar os pesos ideais para cada ativo.
 
@@ -98,20 +98,22 @@ Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 4. **Treinamento e teste**:
 
    - Alimentação da rede neural com os dados de treinamento
-   
+
    - Ajuste dos pesos para minimizar a função de perda.
 
    - Avaliação do desempenho do modelo usando os dados de teste com métricas de desempenho, precisão, acurácia, matriz de confusão e F1-Score.
 
    - Ajuste dos hiperparâmetros (como taxa de aprendizado) com base na estratégia de busca aleatória (_Random Search_) juntamente com a validação cruzada (_Cross-Validation_). (**em análise**)
 
-      - Escolha da grade de hiperparâmetros: primeiramente definir a faixa de valores possíveis para cada hiperparâmetro (número de camadas ocultas, o número de neurônios em cada camada, a taxa de aprendizado) a ser ajustado.
+     - Definição da faixa de hiperparâmetros: primeiramente, determinar um intervalo de valores possíveis para cada hiperparâmetro a ser ajustado (número de camadas ocultas, número de neurônios em cada camada, taxa de aprendizado).
 
-      - Aplicação do Random Search: para cada iteração, selecionar aleatoriamente um conjunto de valores de hiperparâmetros da grade.
+     - Aplicação do Random Search: em cada iteração, selecionar aleatoriamente um conjunto de valores de hiperparâmetros dentro das faixas definidas.
 
-      - Treinamento e validação cruzada: para cada conjunto de hiperparâmetros selecionado, executar a validação cruzada.
+     - Treinamento e validação cruzada: para cada conjunto de hiperparâmetros selecionado, executar a validação cruzada.
 
-      - Por fim avaliar o desempenho do modelo em cada iteração da busca aleatória usando as métricas de desempenho e selecionar o que performou melhor.
+     - Avaliação do desempenho: avaliar o desempenho do modelo em cada iteração da busca aleatória usando as métricas de desempenho.
+
+     - Seleção do melhor conjunto: ao final das iterações, escolher o conjunto de hiperparâmetros que resultou no melhor desempenho nas métricas avaliadas.
 
 5. **Avaliação Final**:
 
@@ -119,5 +121,4 @@ Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
    - Avaliação final do desempenho do modelo e realizar a comparação com as métricas de otimização esperadas. (**em análise**)
 
-6. **Integração no Sistema**:
-   - Integre a rede neural treinada no seu sistema de otimização de carteira. Use os parâmetros ajustados pela rede para otimizar as carteiras de investimento.
+6. **Integração no sistema**
