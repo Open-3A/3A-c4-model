@@ -8,7 +8,7 @@ System(backend, "Back-end", "Servidor responsável por prover as funcionalidades
 System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer as informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
 
 Container_Boundary(asset_analysis_ai, "Asset Analysis AI"){
-  Container_Ext(riskfolio_lib, "Riskfolio-Lib", "Python", "Otimização de carteira de investimento e alocação estratégica de ativos Quantitativos")
+  Container_Ext(riskfolio_lib, "Riskfolio-Lib", "Python", "Otimização de carteira de investimento e alocação estratégica de ativos")
   Container(model, "Modelo de ajuste de métricas", "Python", "Modelo para ajustar as métricas conforme o perfil do investidor para serem utilizar no Riskfolio-Lib")
   Container(api, "API", "Python", "API responsável por receber as requisições de outros serviços do sistema e disponibilizar relatórios no formato PDF")
 }
