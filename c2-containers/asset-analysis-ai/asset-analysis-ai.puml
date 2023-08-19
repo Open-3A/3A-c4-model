@@ -9,17 +9,22 @@ System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer as informa�
 
 Container_Boundary(asset_analysis_ai, "Asset Analysis AI"){
   Container_Ext(riskfolio_lib, "Riskfolio-Lib", "Python", "Otimização de carteira de investimento e alocação estratégica de ativos")
-  Container(model, "Modelo de ajuste de métricas", "Python", "Modelo para ajustar as métricas conforme o perfil do investidor para serem utilizar no Riskfolio-Lib")
+  Container(model, "Modelo Value Investing", "Python", "Rede neural responsável por encontrar os melhores parâmetros para o aplicar nas fórmulas de cálculo do valor intrínseco dos ativos. Além de retornar outras métricas fundamentais no value investing.")
   Container(api, "API", "Python", "API responsável por receber as requisições de outros serviços do sistema e disponibilizar relatórios no formato PDF")
+  Container(b3, "Serviço da B3", "Python", "Obter o códigos dos ativos que compoçem os índices IBOV, IDIV e SMLL da B3.")
+  Container(preprocessing_service, "Serviço de pré-processamento", "Python", "Aplicar o pré-processamento dos dados e realizar a seleção dos ativos para compor a carteira de investimento de acordo com o perfil do investidor")
+  Container(report_service, "Serviço de relatório", "Python / Python-PDFKit", "Criar o relatório com base nos dados do modelo Value Investing no formato PDF.")
 }
 
-Rel(backend, api, "Solicita relatório")
-Rel(api, model, "Envia os dados do usuário")
-Rel(model, riskfolio_lib, "Envia as métricas e informações da carteira do usuário")
-Rel(riskfolio_lib, api, "Envia relatório")
-Rel(api, backend, "Envia relatório no formato PDF", "Event Stream")
-Rel(riskfolio_lib, yahoo_finance, "Coleta de dados financeiros")
-Rel(model, yahoo_finance, "Coleta de dados financeiros")
-
+Rel(b3, preprocessing_service, "Códigos dos ativos")
+Rel(preprocessing_service, riskfolio_lib, "Envio dos ativos")
+Rel(riskfolio_lib, preprocessing_service, "Carteira de investimento otimizada")
+Rel(yahoo_finance, preprocessing_service, "Coleta dos dados financeiros")
+Rel(preprocessing_service, model, "Envio dos dados pré-processados")
+Rel(model, report_service, "Envio dos dados de cada ativo em carteira")
+Rel(yahoo_finance, report_service, "Coleta das cotações dos principais índices e moedas estrangeiras")
+Rel(report_service, api, "Relatório em PDF")
+Rel(api, backend, "Envio do relatório em PDF", "HTTPS/Event Stream")
+Rel(backend, api, "Solicitação de relatório", "HTTPS/JSON")
 
 @enduml

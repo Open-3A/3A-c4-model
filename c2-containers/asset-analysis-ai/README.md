@@ -31,7 +31,7 @@ Gráfico de linha para mostrar o retorno acumulado do ativo VALE3 nos últimos 5
 
 - Preço atual: R$ 67,00
 - Peso: 7.5%
-- Preço teto: R$ 73,00
+- Preço justo: R$ 73,00
 - Margem de segurança: 34%
 - Risco (0 a 100): 40
 - Recomendação: COMPRAR
@@ -89,25 +89,55 @@ Após o entendimento do modelo de Markowitz, será apresentado alguns argumentos
 
 - **Modelagem de carteiras diversificadas**: Dado que o sistema visa a auxiliar o investidor na construção de carteiras de investimento, a Teoria de Markowitz oferece uma recurso úteis para criar carteiras diversificadas. Tais recursos são a utilização do Capital Market Line e da fronteira eficiente para a customização na alocação em cada classe de ativo de acordo com o perfil do investidor.
 
-- **Alinhamento com Objetivos de Longo Prazo**: A abordagem de Markowitz, ao otimizar a carteira para o equilíbrio entre risco e retorno, se encaixa bem com investidores que têm objetivos de longo prazo, como a liberdade financeira.
+- **Alinhamento com objetivos de longo prazo**: A abordagem de Markowitz, ao otimizar a carteira para o equilíbrio entre risco e retorno, se encaixa bem com investidores que têm objetivos de longo prazo, como a liberdade financeira.
 
-## Modelo de ajuste de métricas
+## Modelo Value Investing
 
-Esse modelo será uma rede neural Perceptron multicamada (_feed forward_) responsável por testar e disponibilizar o melhor conjunto de parâmetros que serão utilizados nas funções de otimização do Riskfolio Lib para a confeccionar do relatório personalizado do investidor. Além disso ele é responsável por selecionar o número ideal de ativos e seus pesos a fim de potencializar os ganhos, considerando a menor covariância possível entre esses ativos.
+Esse modelo será uma rede neural Perceptron multicamada (_feed forward_) responsável pelo cálculo dos melhores parâmetros para cada ativo ao aplicar a fórmula do valor intrínseco para tentar estimar o valor real de um ativo com base em seus fundamentos subjacentes. Nesse modelo será utilizado duas das principais fórmulas e conceitos relacionados ao valor intrínseco:
+
+1. **Fluxo de Caixa Descontado (DCF)**:
+
+   O modelo DCF é frequentemente usado para calcular o valor intrínseco de ações. Ele se baseia no fluxo de caixa futuro esperado que uma empresa pode gerar e traz esses fluxos de caixa futuros a valor presente usando uma taxa de desconto adequada. A fórmula básica é:
+
+   $$
+   \text{Valor Intrínseco} = \sum_{t=1}^{n}{\frac{\text{Fluxo de Caixa Futuro}}{(1 + \text{Taxa de Desconto})^t}}
+   $$
+
+   - $\text{Fluxo de Caixa Futuro}$: O montante projetado de dinheiro que a empresa gerará em cada período futuro.
+
+   - $\text{Taxa de Desconto}$: Representa o custo de oportunidade ou o retorno mínimo exigido pelos investidores para assumir o risco do investimento.
+
+   - $\text{Período}$: O número de períodos futuros para os quais será projetado os fluxos de caixa.
+
+   Nesse caso, a rede neural deverá ser capaz de encontrar os valores dos parâmetros $\text{Fluxo de Caixa Futuro}$ e $\text{Taxa de Desconto}$ que melhor se encaixa para cada ativo.
+
+2. **Modelo de Gordon**:
+
+   Para empresas que pagam dividendos regulares, o modelo de valorização de dividendos é usado. Ele se concentra nos dividendos esperados que um investidor receberá ao longo do tempo. A fórmula simplificada é:
+
+   $$
+   \text{Valor Intrínseco} = \frac{\text{Dividendos por ação}}{\text{K} - \text{G}}
+   $$
+
+   - $\text{Dividendos por ação}$: O dividendo por ação esperado nos próximos doze meses.
+
+   - $\text{K}$: A taxa de desconto que representa a taxa de retorno esperado pelo investidor (ou Custo Médio Ponderado de Capital, WACC).
+
+   - $\text{G}$: A taxa de crescimento dos dividendos na perpetuidade
+
+   Nesse caso, a rede neural deverá ser capaz de encontrar os valores dos parâmetros $\text{Dividendos por ação}$, $\text{K}$ e $\text{G}$ que melhor se encaixa para cada ativo. Além disso, ele deve aplicar esse modelo apenas em ações consideradas boas pagadoras de dividendos (com base no histórico da empresa).
 
 Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
-1. **Preparação dos dados**:
+1. **Pré-processamento dos dados**:
 
-   - Coleta dos dados financeiros do yFinance, como preços de ativos, retornos, indicadores fundamentalistas, etc.
+   - Coleta do código dos ativos que compõem os índices [IBOV](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-amplos/indice-ibovespa-ibovespa-composicao-da-carteira.htm), [IDIV](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-de-segmentos-e-setoriais/indice-dividendos-idiv-composicao-da-carteira.htm) e [SMLL](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-de-segmentos-e-setoriais/indice-small-cap-smll-composicao-da-carteira.htm) no site da B3
 
-   - Execução das funções do Riskfolio para obter as métricas de risco e retorno para diferentes combinações de ativos. Inicialmente será fornecido parâmetros aleatórios para o início do aprendizado da rede neural.
+   - Coleta do preço de fechamento ajustado (`Adj Close`) e calculo da variação percentual diária de cada ativo.
 
-   - Organização desses dados de forma a fim de ter uma divisão clara entre os atributos previsores (entrada) e o atributo meta (alvo) para o treinamento da rede neural. As entradas incluem preços de ativos, retornos passados, métricas de risco, etc. Já o alvo é as métricas de otimização utilizados pelas funções do Riskfolio.
+   - Seleção dos ativos com base na Teoria Moderna do Portfólio de Markowitz usando a biblioteca [Riskfolio Lib](https://github.com/dcajasn/Riskfolio-Lib).
 
-2. **Divisão dos dados**:
-
-   - Separação dos dados em conjuntos de treinamento (75%) e teste (25%) para a avaliação de desempenho do modelo em dados não vistos durante o treinamento e evitar o _overfitting_.
+   - Coleta dos dados financeiros dos ativos em carteira via yFinance e cálculo de indicadores fundamentalistas
 
 3. **Arquitetura da rede neural**:
 
@@ -127,7 +157,7 @@ Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
 4. **Treinamento e teste**:
 
-   - Alimentação da rede neural com os dados de treinamento
+   - Separação dos dados em conjuntos de treinamento (75%) e teste (25%) para a avaliação de desempenho do modelo em dados não vistos durante o treinamento e evitar o _overfitting_.
 
    - Ajuste dos pesos para minimizar a função de perda.
 
