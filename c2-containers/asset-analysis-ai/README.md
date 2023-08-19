@@ -9,8 +9,8 @@
 
 ## Visão geral
 
-|    IBOV    | SMALL  |   IFIX   |  S&P500  | Dow Jones | Dólar | Euro |
-| :--------: | :----: | :------: | :------: | :-------: | :---: | :--: |
+|    IBOV    | SMALL |   IFIX   |  S&P500  | Dow Jones | Dólar | Euro |
+| :--------: | :---: | :------: | :------: | :-------: | :---: | :--: |
 | 117.001,84 | 2.250 | 3.213,95 | 4.478,55 | 35.245,98 | 4,95  | 5,41 |
 
 Gráfico de setor para representar os pesos ideais para cada ativo.
@@ -49,17 +49,47 @@ Gráfico de linha para representar o retorno acumulado da carteira e comparar co
 
 ## Riskfolio Lib
 
-### Otimização de carteiras
+### Modelo de otimização de carteira
 
-Para a otimização das carteiras de investimento, será utilizado:
+A Teoria Moderna do Portfólio, desenvolvida por Harry Markowitz na década de 1950, é um dos pilares fundamentais da finança moderna e oferece uma abordagem quantitativa para a seleção de ativos em uma carteira de investimentos. Essa teoria revolucionou a maneira como os investidores consideram o risco e o retorno ao construir suas carteiras, introduzindo conceitos-chave como risco-retorno, fronteira eficiente, Capital Market Line (CML) e carteira ótima.
 
-- Logarithmic Mean Risk (Kelly Criterion) para investidores com perfil arrojado.
+**1. Risco-Retorno:**
 
-  Essa abordagem busca maximizar o crescimento do capital ao longo do tempo e é aplicável quando os investidores têm metas de longo prazo. No entanto, pode ser mais sensível a mudanças nas estimativas de retorno.
+- O conceito de risco-retorno é central na Teoria Moderna do Portfólio. Ele afirma que os investidores procuram maximizar seus retornos esperados enquanto minimizam o risco associado a esses retornos.
 
-- Entropic Value at Risk (EVaR) para investidores com perfil conservador (**em análise**).
+- O "retorno" é a medida de ganho ou perda de um investimento ao longo do tempo, enquanto o "risco" é a variabilidade dos retornos em relação à média esperada.
 
-  O EVaR leva em consideração a assimetria nas distribuições de retorno. Ele pode ser adequado quando os investidores têm preocupações específicas com as caudas das distribuições e desejam controlar o risco em cenários de perda extrema.
+**2. Fronteira Eficiente:**
+
+- A fronteira eficiente representa a combinação ótima de ativos que oferece o maior retorno esperado para um determinado nível de risco.
+
+- A fronteira eficiente é definida como a curva que conecta todos os portfólios possíveis de ativos, onde nenhum portfólio na curva é superado por outro em termos de retorno para um dado nível de risco.
+
+**3. Carteira Ótima:**
+
+- A carteira ótima é o ponto na fronteira eficiente que melhor se adéque ao perfil de risco e preferências do investidor.
+
+- A escolha da carteira ótima depende da relação entre o nível de risco que o investidor está disposto a assumir e o retorno esperado que ele deseja alcançar.
+
+- Investidores com diferentes níveis de aversão ao risco escolherão diferentes pontos ao longo da fronteira eficiente.
+
+**4. Capital Market Line (CML):**
+
+- A CML é uma linha tangente à fronteira eficiente que representa todas as combinações possíveis de um ativo de risco e um ativo livre de risco.
+
+- O ativo livre de risco é frequentemente considerado como um título do governo ou um título com retorno conhecido e sem risco de inadimplência.
+
+- A CML mostra a relação linear entre o retorno esperado e o risco para a carteira composta por um ativo livre de risco e um portfólio de ativos de risco.
+
+A Teoria Moderna do Portfólio enfatiza a diversificação como forma de reduzir o risco total de uma carteira sem sacrificar o retorno esperado. Ela introduziu conceitos matemáticos, como a covariância, para quantificar a relação entre ativos e a importância de considerar a diversificação ao tomar decisões de investimento. A eficiência da diversificação é demonstrada pela fronteira eficiente, que ilustra como os investidores podem otimizar suas carteiras para maximizar o retorno esperado para qualquer nível de risco.
+
+Após o entendimento do modelo de Markowitz, será apresentado alguns argumentos que culminaram na escolha desse modelo no sistema:
+
+- **Consideração das preferências do investidor**: A Teoria de Markowitz permite a personalização das carteiras de acordo com o perfil de risco e as preferências de cada investidor. Isso é fundamental, uma vez que uma das principais premissas do projeto é a flexibilidade na criação de relatórios direcionados para cada tipo de investidor.
+
+- **Modelagem de carteiras diversificadas**: Dado que o sistema visa a auxiliar o investidor na construção de carteiras de investimento, a Teoria de Markowitz oferece uma recurso úteis para criar carteiras diversificadas. Tais recursos são a utilização do Capital Market Line e da fronteira eficiente para a customização na alocação em cada classe de ativo de acordo com o perfil do investidor.
+
+- **Alinhamento com Objetivos de Longo Prazo**: A abordagem de Markowitz, ao otimizar a carteira para o equilíbrio entre risco e retorno, se encaixa bem com investidores que têm objetivos de longo prazo, como a liberdade financeira.
 
 ## Modelo de ajuste de métricas
 
