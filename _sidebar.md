@@ -6,10 +6,10 @@
     - [Asset Analysis AI](c2-containers/asset-analysis-ai/)
   - C3 Components
     - Back-end
-      - [Módulo de cotação](c3-components/back-end/quotation-module)
-      - [Módulo de curso](c3-components/back-end/course-module)
-      - [Módulo de produto](c3-components/back-end/product-module)
-      - [Módulo de relatório](c3-components/back-end/report-module)
-      - [Módulo de segurança](c3-components/back-end/security-module)
-    - [Front-end mobile](c3-components/front-end-mobile)
-    - [Asset Analysis AI](c3-components/asset-analysis-ai)
+      - [Módulo de cotação](c3-components/back-end/quotation-module/)
+      - [Módulo de curso](c3-components/back-end/course-module/)
+      - [Módulo de produto](c3-components/back-end/product-module/)
+      - [Módulo de relatório](c3-components/back-end/report-module/)
+      - [Módulo de segurança](c3-components/back-end/security-module/)
+    - [Front-end mobile](c3-components/front-end-mobile/)
+    - [Asset Analysis AI](c3-components/asset-analysis-ai/)
