@@ -139,25 +139,56 @@ Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
    - Coleta dos dados financeiros dos ativos em carteira via yFinance e cálculo de indicadores fundamentalistas
 
-3. **Arquitetura da rede neural**:
+2. **Arquitetura da rede neural**:
 
-   - Perceptron multicamada (_feed forward_)
+   - _Multilayer Perceptron_
 
-   - O número de camadas e neurônios em cada camada será definido por meio experimental.
+   - O número de camadas ocultas e neurônios em cada uma será definido por meio experimental. Entretanto será configurado inicialmente 2 camadas ocultas e com o número de neurônio definido pela fórmula abaixo:
 
-   - Escolha das funções de ativação: (**em análise**)
+     $$
+     \text{Neurônios ocultos} = \frac{\text{Neurônios de entrada} + \text{Neurônios de saída}}{2}
+     $$
 
-     - Funções como ReLU (Rectified Linear Activation) e Sigmoide são as opções mais comuns para camadas intermediárias e que apresentam um desempenho bem satisfatório.
+   - Escolha da funções de ativação: ReLU (Rectified Linear Unit)
 
-   - Escolha da função de perda e otimização:
+     A função de ativação ReLU (Rectified Linear Unit) transforma qualquer valor negativo em zero e mantém os valores positivos intactos. A função ReLU é definida como:
 
-     - Escolha uma função de perda para o cálculo do erro do modelo. (**em análise**)
+     $$
+     f(x) = \begin{cases}
+     x, & \text{se } x > 0 \\
+     0, & \text{se } x \leq 0
+     \end{cases}
+     $$
 
-     - Escolha de um otimizador para ajustar os pesos da rede durante o treinamento. (**em análise**)
+     O racional por trás da utilização da função ReLU nas camadas ocultas e na camada de saída, pois se deve ao fato de que o atributo meta requer que os valores positivos sejam mantidos, pois eles correspondem ao "valor intrínseco" do ativo em questão.
+
+- Escolha da função de perda e otimização:
+
+  - Escolha uma função de perda para o cálculo do erro do modelo: _Mean Square Error_ (MSE)
+
+    O MSE (ou erro média quadrático) é uma métrica que calcula a média dos quadrados das diferenças entre as previsões do modelo e os valores reais. Ele dá maior peso a erros maiores, pois o quadrado dos erros amplifica as discrepâncias.
+
+    A fórmula do MSE para um conjunto de dados com $n$ exemplos é:
+
+    $$
+    MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2
+    $$
+
+    Onde:
+
+    - $y_i$ é o valor real do exemplo $i$
+
+    - $\hat{y_i}$ é a previsão do modelo para o exemplo $i$.
+
+    A escolha do MSE foi embasada no entendimento de que, dadas as particularidades desse sistema, erros mais significativos devem ser mais fortemente penalizados.
+
+  - Escolha do otimizador para ajustar os pesos da rede durante o treinamento: _Stochastic Gradient Descent_ (SGD)
+
+    O SGD atualiza os pesos a cada iteração, utilizando apenas um exemplo de treinamento por vez. Isso torna o SGD mais rápido a cada iteração, mas também resulta em convergência mais ruidosa, pois as atualizações são menos estáveis devido à variabilidade dos exemplos individuais, ou seja, eventualmente pode pular o mínimo global (local com o erro mínimo). Esse algoritmo de otimização tende a ser mais veloz e requer menos recursos de memória.
 
 4. **Treinamento e teste**:
 
-   - Separação dos dados em conjuntos de treinamento (75%) e teste (25%) para a avaliação de desempenho do modelo em dados não vistos durante o treinamento e evitar o _overfitting_.
+   - Separação dos dados em conjuntos de treinamento (75%) e teste (25%) para a avaliação de desempenho do modelo em dados não vistos durante o treinamento e evitar o _underfitting_ e _overfitting_.
 
    - Ajuste dos pesos para minimizar a função de perda.
 
