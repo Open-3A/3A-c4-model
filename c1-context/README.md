@@ -10,11 +10,11 @@ O usuário seria uma pessoa que usa o aplicativo 3A em um celular Android ou IOS
 
 2. **Investidor**: quando o usuário completa todos os módulos do curso, é atribuído o cargo de **investidor** e então é possível comprar a inteligência artificial para criação de relatórios customizados (Asset Analysis AI) na loja do aplicativo.
 
-3. **Administrador**: o cargo de administrador é atribuído apenas ao criador do projeto [@ImGabreuw](https://github.com/ImGabreuw) que é responsável por configurar as recompensas por conclusão de módulos e capítulos, adição e edição de conteúdos do curso.
+3. **Administrador**: o cargo de administrador é responsável por configurar as recompensas de conclusão de módulos e capítulos, adição de conteúdos no curso e prestar suporte aos usuários.
 
 ### **Asset Analysis AI (3A)**
 
-O projeto _Asset Analysis AI_ (3A) é uma plataforma gamificada que faz uso de inteligência artificial "IA" com objetivo de auxiliar as pessoas em atingirem a estabilidade financeira no longo prazo. Desse modo, esta aplicação tem como objetivo democratizar a educação financeira no qual a gamificação pode tornar o processo de aprendizado mais engajador, favorecendo a retenção de usuários na plataforma. Além disso, a IA pode proporcionar uma ganho de produtividade na seleção de ativos a partir da estratégia de investimento _value investing_ com cálculo de preço teto e sugestão de preço de entrada e saída com base em análise técnica.
+O projeto _Asset Analysis AI_ (3A) é uma plataforma gamificada que faz uso de inteligência artificial "IA" com objetivo de auxiliar as pessoas em atingirem a estabilidade financeira no longo prazo. Desse modo, esta aplicação tem como objetivo democratizar a educação financeira no qual a gamificação pode tornar o processo de aprendizado mais engajador, favorecendo a retenção de usuários na plataforma. Além disso, a IA pode proporcionar uma ganho de produtividade na seleção de ativos a partir da estratégia de investimento _value investing_ com cálculo de preço justo e otimização de carteiras com base na Teoria Moderna do Portfólio de Markowitz.
 
 ### **Sistema de e-mail**
 
