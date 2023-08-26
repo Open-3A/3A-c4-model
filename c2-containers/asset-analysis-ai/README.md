@@ -111,7 +111,7 @@ Esse modelo será uma rede neural Perceptron multicamada (_feed forward_) respon
 
    Nesse caso, a rede neural deverá ser capaz de encontrar os valores dos parâmetros $\text{Fluxo de Caixa Futuro}$ e $\text{Taxa de Desconto}$ que melhor se encaixa para cada ativo.
 
-2. **Modelo de Gordon**:
+2. **Modelo de Gordon**: (**em análise**)
 
    Para empresas que pagam dividendos regulares, o modelo de valorização de dividendos é usado. Ele se concentra nos dividendos esperados que um investidor receberá ao longo do tempo. A fórmula simplificada é:
 
@@ -129,7 +129,7 @@ Esse modelo será uma rede neural Perceptron multicamada (_feed forward_) respon
 
 Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
-1. **Pré-processamento dos dados**:
+1. **Coleta e análise de dados**:
 
    - Coleta do código dos ativos que compõem os índices [IBOV](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-amplos/indice-ibovespa-ibovespa-composicao-da-carteira.htm), [IDIV](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-de-segmentos-e-setoriais/indice-dividendos-idiv-composicao-da-carteira.htm) e [SMLL](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-de-segmentos-e-setoriais/indice-small-cap-smll-composicao-da-carteira.htm) no site da B3
 
@@ -139,17 +139,25 @@ Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
    - Coleta dos dados financeiros dos ativos em carteira via yFinance e cálculo de indicadores fundamentalistas
 
-2. **Arquitetura da rede neural**:
+2. **Pré-processamento:**
 
-   - _Multilayer Perceptron_
+   - Tratamento de dados faltantes para garantir a qualidade dos dados.
 
-   - O número de camadas ocultas e neurônios em cada uma será definido por meio experimental. Entretanto será configurado inicialmente 2 camadas ocultas e com o número de neurônio definido pela fórmula abaixo:
+   - Codificação de variáveis categóricas em numéricas para serem usadas no algoritmo.
 
-     $$
-     \text{Neurônios ocultos} = \frac{\text{Neurônios de entrada} + \text{Neurônios de saída}}{2}
-     $$
+   - Padronização dos dados financeiros e indicadores fundamentalistas para evitar divergências de escala ao serem transformados para terem média zero e desvio padrão igual a 1.
 
-   - Escolha da funções de ativação: ReLU (Rectified Linear Unit)
+   - Separação dos dados em conjuntos de treinamento (75%) e teste (25%) para avaliação de desempenho do modelo.
+
+3. **Modelagem e inferência:**
+
+   - Utilização de uma arquitetura _Multilayer Perceptron_.
+
+   - Definição do número de camadas ocultas e neurônios por meio de experimentação, embora será configurado inicialmente 2 camadas ocultas e com o número de neurônio definido pela fórmula:
+
+     $\text{Neurônios ocultos} = \frac{\text{Neurônios de entrada} + \text{Neurônios de saída}}{2}$
+
+   - Escolha da função de ativação **ReLU**.
 
      A função de ativação ReLU (Rectified Linear Unit) transforma qualquer valor negativo em zero e mantém os valores positivos intactos. A função ReLU é definida como:
 
@@ -162,54 +170,46 @@ Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
      O racional por trás da utilização da função ReLU nas camadas ocultas e na camada de saída, pois se deve ao fato de que o atributo meta requer que os valores positivos sejam mantidos, pois eles correspondem ao "valor intrínseco" do ativo em questão.
 
-- Escolha da função de perda e otimização:
+   - Escolha da função de perda _Mean Square Error_ (MSE).
 
-  - Escolha uma função de perda para o cálculo do erro do modelo: _Mean Square Error_ (MSE)
+     O MSE (ou erro média quadrático) é uma métrica que calcula a média dos quadrados das diferenças entre as previsões do modelo e os valores reais. Ele dá maior peso a erros maiores, pois o quadrado dos erros amplifica as discrepâncias.
 
-    O MSE (ou erro média quadrático) é uma métrica que calcula a média dos quadrados das diferenças entre as previsões do modelo e os valores reais. Ele dá maior peso a erros maiores, pois o quadrado dos erros amplifica as discrepâncias.
+     A fórmula do MSE para um conjunto de dados com $n$ exemplos é:
 
-    A fórmula do MSE para um conjunto de dados com $n$ exemplos é:
+     $$
+     MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2
+     $$
 
-    $$
-    MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2
-    $$
+     Onde:
 
-    Onde:
+     - $y_i$ é o valor real do exemplo $i$
 
-    - $y_i$ é o valor real do exemplo $i$
+     - $\hat{y_i}$ é a previsão do modelo para o exemplo $i$.
 
-    - $\hat{y_i}$ é a previsão do modelo para o exemplo $i$.
+     A escolha do MSE foi embasada no entendimento de que, dadas as particularidades desse sistema, erros mais significativos devem ser mais fortemente penalizados.
 
-    A escolha do MSE foi embasada no entendimento de que, dadas as particularidades desse sistema, erros mais significativos devem ser mais fortemente penalizados.
+   - Utilização do otimizador _Stochastic Gradient Descent_ (SGD).
 
-  - Escolha do otimizador para ajustar os pesos da rede durante o treinamento: _Stochastic Gradient Descent_ (SGD)
+     O SGD atualiza os pesos a cada iteração, utilizando apenas um exemplo de treinamento por vez. Isso torna o SGD mais rápido a cada iteração, mas também resulta em convergência mais ruidosa, pois as atualizações são menos estáveis devido à variabilidade dos exemplos individuais, ou seja, eventualmente pode pular o mínimo global (local com o erro mínimo). Esse algoritmo de otimização tende a ser mais veloz e requer menos recursos de memória.
 
-    O SGD atualiza os pesos a cada iteração, utilizando apenas um exemplo de treinamento por vez. Isso torna o SGD mais rápido a cada iteração, mas também resulta em convergência mais ruidosa, pois as atualizações são menos estáveis devido à variabilidade dos exemplos individuais, ou seja, eventualmente pode pular o mínimo global (local com o erro mínimo). Esse algoritmo de otimização tende a ser mais veloz e requer menos recursos de memória.
+   - Aplicação do Grid Search para encontrar a combinação de hiperparâmetros que otimiza o desempenho do modelo.
 
-4. **Treinamento e teste**:
+   - Implementação da validação cruzada (_K-fold cross validation_) para mitigar a limitação dos dados de demonstrativo de fluxo de caixa (DFC) para treinamento e teste.
 
-   - Separação dos dados em conjuntos de treinamento (75%) e teste (25%) para a avaliação de desempenho do modelo em dados não vistos durante o treinamento e evitar o _underfitting_ e _overfitting_.
+4. **Pós-processamento:**
 
-   - Ajuste dos pesos para minimizar a função de perda.
+   - Comparação modelos com base nas métricas de desempenho e escolher o melhor com base nas métricas de média desvio padrão mínima máxima e coeficiente de variação a fim de obter o modelo com a melhor consistência nos resultados e que se encaixe no cenário proposto.
 
-   - Avaliação do desempenho do modelo usando os dados de teste com métricas de desempenho, precisão, acurácia, matriz de confusão e F1-Score.
+   - Interpretação dos resultados para compreender as razões por trás do desempenho do modelo e identificar áreas de melhoria.
 
-   - Ajuste dos hiperparâmetros (como taxa de aprendizado) com base na estratégia de busca aleatória (_Random Search_) juntamente com a validação cruzada (_Cross-Validation_). (**em análise**)
+5. **Apresentação de resultados:**:
 
-     - Definição da faixa de hiperparâmetros: primeiramente, determinar um intervalo de valores possíveis para cada hiperparâmetro a ser ajustado (número de camadas ocultas, número de neurônios em cada camada, taxa de aprendizado).
+   - Avaliação do desempenho do modelo utilizando métricas como precisão, acurácia, matriz de confusão e F1-Score.
 
-     - Aplicação do Random Search: em cada iteração, selecionar aleatoriamente um conjunto de valores de hiperparâmetros dentro das faixas definidas.
+   - Cálculo e visualização do retorno acumulado da carteira com base nos índices IBOV, IDIV, SMLL, CDI e IPCA e volatilidade.
 
-     - Treinamento e validação cruzada: para cada conjunto de hiperparâmetros selecionado, executar a validação cruzada.
+6. **Implantação do modelo**
 
-     - Avaliação do desempenho: avaliar o desempenho do modelo em cada iteração da busca aleatória usando as métricas de desempenho.
-
-     - Seleção do melhor conjunto: ao final das iterações, escolher o conjunto de hiperparâmetros que resultou no melhor desempenho nas métricas avaliadas.
-
-5. **Avaliação Final**:
-
-   - Depois de obter um modelo treinado e testado, submetê-lo a uma nova base de dados para prever resultados.
-
-   - Avaliação final do desempenho do modelo e realizar a comparação com as métricas de otimização esperadas. (**em análise**)
-
-6. **Integração no sistema**
+   - Integração do modelo de otimização de carteira em um sistema ou plataforma, permitindo que investidores utilizem suas previsões para tomar decisões informadas.
+   
+   - Testes de integração e garantia de que o sistema opera corretamente em um ambiente de produção.
