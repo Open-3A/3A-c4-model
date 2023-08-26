@@ -129,7 +129,7 @@ Esse modelo será uma rede neural Perceptron multicamada (_feed forward_) respon
 
 Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
-1. **Coleta e análise de dados**:
+1. **Coleta e análise de dados:**
 
    - Coleta do código dos ativos que compõem os índices [IBOV](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-amplos/indice-ibovespa-ibovespa-composicao-da-carteira.htm), [IDIV](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-de-segmentos-e-setoriais/indice-dividendos-idiv-composicao-da-carteira.htm) e [SMLL](https://www.b3.com.br/pt_br/market-data-e-indices/indices/indices-de-segmentos-e-setoriais/indice-small-cap-smll-composicao-da-carteira.htm) no site da B3
 
@@ -202,13 +202,13 @@ Abaixo está descrito o fluxo de desenvolvimento desse modelo:
 
    - Interpretação dos resultados para compreender as razões por trás do desempenho do modelo e identificar áreas de melhoria.
 
-5. **Apresentação de resultados:**:
+5. **Apresentação de resultados:**
 
    - Avaliação do desempenho do modelo utilizando métricas como precisão, acurácia, matriz de confusão e F1-Score.
 
    - Cálculo e visualização do retorno acumulado da carteira com base nos índices IBOV, IDIV, SMLL, CDI e IPCA e volatilidade.
 
-6. **Implantação do modelo**
+6. **Implantação do modelo:**
 
    - Integração do modelo de otimização de carteira em um sistema ou plataforma, permitindo que investidores utilizem suas previsões para tomar decisões informadas.
    
