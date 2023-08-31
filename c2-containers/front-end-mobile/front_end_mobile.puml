@@ -4,21 +4,31 @@
 
 LAYOUT_WITH_LEGEND()
 
-Person(developer, "Desenvolvedor")
+System_Ext(filesystem, "Sistema de arquivo", "Sistema de arquivo para leitura e escrita de arquivos no dispositivo móvel.")
+Container_Ext(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
+Container_Ext(products_module, "Módulo de produtos", "Java / Spring Web", "Módulo responsável pela listagem dos produtos e a criação / edição de produtos é liberado apenas para administradores")
+Container_Ext(courses_module, "Módulo de cursos", "Java / Spring Web", "Módulo para listagem dos módulos e capítulos e obter o progresso de cada usuário. Para usuários com permissão de administrador, é possível editar e adicionar novos cursos e módulos")
+Container_Ext(reports_module, "Módulo de relatórios", "Java / Spring Web", "Módulo para listagem e solicitação de relatórios de um determinado usuário")
+Container_Ext(quotation_module, "Módulo de cotação", "Java / Spring Web / JSoup", "Módulo para obter as cotações dos principais índices do mercado financeiro do Google Finance")
 
-Person(ios_user, "Usuário IOS")
-Person(android_user, "Usuário Android")
-
-Container_Boundary(front_end_mobile, "Front-end Mobile"){
-  Container(development_environment, "Ambiente de desenvolvimento", "TypeScript / React Native", "Desenvolvimento do aplicativo com suporte à cross plataform entre Android e IOS")
-  Container(ios, "Versão IOS", "Swift", "Versão nativa IOS gerada a partir do código em React Native")
-  Container(android, "Versão Android", "Java", "Versão nativa Android gerada a partir do código em React Native")
+Container_Boundary(mobile, "Front-end mobile"){
+  Container(login, "Login", "TypeScript/React Native", "Tela de login onde o usuário irá informar o endereço de e-mail e senha informados no formulário de cadastro.")
+  Container(sigup, "Cadastro", "TypeScript/React Native", "Tela de cadastro onde o usuário irá informar o dados pessoais solicitados e confirmar a criação da conta por meio do e-mail de confirmação enviado para o email cadastrado.")
+  Container(profile, "Perfil", "TypeScript/React Native", "Tela de perfil onde as informações de cadastro e preferências do usuário serão exibidas. Essas informações são salvas no dispositivos via shared preferences.")
+  Container(home, "Início", "TypeScript/React Native", "Tela de início onde responsável por mostrar as cotações dos principais índices, capítulo em andamento e últimos relatórios.")
+  Container(course, "Cursos", "TypeScript/React Native", "Tela de cursos onde é exibido os módulos do curso e o progresso para os usuários normais. Já para administradores, e liberado a adição, edição e exclusão de módulos e capítulos.")
+  Container(report, "Relatórios", "TypeScript/React Native", "Tela de relatórios onde é listados os relatórios de investimento do usuário.")
+  Container(product, "Produtos", "TypeScript/React Native", "Tela de produtos onde é listados os produtos liberados com base no nível do usuário.")
 }
 
-Rel(developer, development_environment, "Desenvolve")
-Rel(development_environment, ios, "Gera")
-Rel(development_environment, android, "Gera")
-Rel(ios_user, ios, "Usa")
-Rel(android_user, android, "Usa")
+Rel(login, security_module, "Envia dados de login", "HTTPS/JSON")
+Rel(sigup, security_module, "Envia dados de cadastro", "HTTPS/JSON")
+Rel(profile, filesystem, "Leitura/Escrita de arquivo")
+Rel(home, quotation_module, "Obtêm as cotações", "HTTPS/JSON")
+Rel(home, courses_module, "Obtêm capítulo em andamento", "HTTPS/JSON")
+Rel(home, reports_module, "Obtêm os últimos relatórios", "HTTPS/JSON")
+Rel(course, courses_module, "Obtêm os módulos e capítulos", "HTTPS/JSON")
+Rel(report, reports_module, "Obtêm os relatórios", "HTTPS/JSON")
+Rel(product, products_module, "Obtêm os produtos", "HTTPS/JSON")
 
 @enduml
