@@ -4,33 +4,32 @@
 
 LAYOUT_WITH_LEGEND()
 
-System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
-System_Ext(google_finance, "Google Finanças", "Serviço para prover as cotações de ativos da bolsa em tempo real")
+System(mobile, "Front-end mobile", "Aplicativo móvel onde os usuários acessam as funcionalidades do sistema.")
+System_Ext(google_finance, "Google Finanças", "Serviço para prover cotações de ativos da bolsa em tempo real.")
 
 Container_Boundary(backend, "Back-end"){
-  Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
-  Container(products_module, "Módulo de produtos", "Java / Spring Web", "Módulo responsável pela listagem dos produtos e a criação / edição de produtos é liberado apenas para administradores")
-  Container(courses_module, "Módulo de cursos", "Java / Spring Web", "Módulo para listagem dos módulos e capítulos e obter o progresso de cada usuário. Para usuários com permissão de administrador, é possível editar e adicionar novos cursos e módulos")
-  Container(reports_module, "Módulo de relatórios", "Java / Spring Web", "Módulo para listagem e solicitação de relatórios de um determinado usuário")
-  Container(quotation_module, "Módulo de cotação", "Java / Spring Web / JSoup", "Módulo para obter as cotações dos principais índices do mercado financeiro do Google Finance")
+  Container(security_module, "Módulo de segurança", "Java / Spring Security", "Responsável pela autenticação e autorização de usuários via JWT.")
+  Container(products_module, "Módulo de produtos", "Java / Spring Web", "Lista produtos e permite criação / edição apenas por administradores.")
+  Container(courses_module, "Módulo de cursos", "Java / Spring Web", "Lista módulos e capítulos, obtém progresso do usuário, e permite administração de cursos e módulos por administradores.")
+  Container(reports_module, "Módulo de relatórios", "Java / Spring Web", "Permite listagem e solicitação de relatórios por usuários.")
+  Container(quotation_module, "Módulo de cotação", "Java / Spring Web / JSoup", "Obtém cotações de índices do mercado financeiro do Google Finance.")
 }
 
-ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional, porém cada registro tem um atributo 'version' para evitar incosistência ao versionar a API")
-ContainerDb(user_db, "Banco de dados de Usuários", "PostgreSQL", "Banco de dados relacional, para salvar as informações do usuário como nome, e-mail, senha, telefone, cargo e último login para realizar as operações de autenticação e autorização")
-ContainerDb_Ext(redis, "Cache", "Redis", "Camada de cache para persistir por 20 min os dados da cotação do Google Finance")
+ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional; cada registro possui um atributo 'version' para evitar inconsistências ao versionar a API.")
+ContainerDb_Ext(redis, "Cache", "Redis", "Camada de cache para persistência temporária de dados de cotação do Google Finance")
 
-Rel(mobile, security_module, "Faz autenticação do usuário", "JSON/HTTPS")
+Rel(mobile, security_module, "Envia informações de login", "JSON/HTTPS")
 Rel(security_module, mobile, "Retorna JWT após autenticação", "JSON/HTTPS")
-Rel(security_module, products_module, "Usa")
-Rel(security_module, courses_module, "Usa")
-Rel(security_module, reports_module, "Usa")
+Rel(security_module, products_module, "Redireciona")
+Rel(security_module, courses_module, "Redireciona")
+Rel(security_module, reports_module, "Redireciona")
 Rel(mobile, quotation_module, "Faz requisição", "JSON/HTTPS")
 Rel(quotation_module, redis, "Consulta a cotação")
-Rel(redis, google_finance, "Obtém a página HTML crua da cotação", "XML/HTTPS")
+Rel(quotation_module, google_finance, "Obtém a página HTML crua da cotação", "XML/HTTPS")
 
 BiRel(products_module, db, "Usa")
 BiRel(courses_module, db, "Usa")
 BiRel(reports_module, db, "Usa")
-BiRel(security_module, user_db, "Usa")
+BiRel(security_module, db, "Usa")
 
 @enduml
