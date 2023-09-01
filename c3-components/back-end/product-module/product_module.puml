@@ -4,39 +4,38 @@
 
 LAYOUT_WITH_LEGEND()
 
-Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
+Container(security_module, "Módulo de segurança", "Java / Spring Security", "Responsável pela autenticação e autorização de usuários via JWT.")
 
 Boundary(product_module, "Módulo de produto"){
-  Component(product_api, "API", "Spring Web", "Expoem os produtos registrados via API Rest")
-  Component(product_service, "Serviço de aplicação", "Spring Framework", "Contêm as regras de aplicação, executa os casos de uso e faz o mapeamento das entidades")
-  Component(product_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
+  Component(product_api, "API", "Spring Web", "Expoem os casos de uso de produtos via API REST.")
+  Component(product_service, "Serviço de aplicação", "Spring Framework", "Contém regras de aplicação, executa casos de uso e realiza o mapeamento das entidades.")
+  Component(product_mapper, "Mapeador", "MapStruct", "Efetua o mapeamento entre entidades de domínio e de aplicação (DataBase Entity e DTO).")
 
   Boundary(product_use_cases, "Casos de uso"){
-    Boundary(only_admins, "Apenas adminstradores"){
-      Component(edit_product_use_case, "Editar produto", "Spring Framework", "Edição total ou parcial nas informações do produto")
-      Component(add_product_use_case, "Adicionar produto", "Spring Framework", "Salva o novo produto, caso ainda não exista no banco de dado")
+    Boundary(only_admins, "Somente administradores"){
+      Component(edit_product_use_case, "Editar produto", "Spring Framework", "Realiza uma edição completa ou parcial nas informações do produto.")
+      Component(add_product_use_case, "Adicionar produto", "Spring Framework", "Salva um novo produto, caso ainda não exista no banco de dados.")
     }
-    Component(list_products_use_case, "Listagem dos produtos", "Spring Framework", "Listagem dos produtos com paginação e ordenados com base na categoria, destaque (1º), upgrade (2º), etc.")
-    Component(buy_product_use_case, "Comprar produto", "Spring Framework", "Compra de um determinado produto na loja, caso o usuário tenha saldo suficiente")
+    Component(list_products_use_case, "Listagem dos produtos", "Spring Framework", "Lista os produtos com paginação e ordenados por categoria, destaque (1º), upgrade (2º), etc.")
+    Component(buy_product_use_case, "Comprar produto", "Spring Framework", "Permite a compra de um produto específico na loja, caso o usuário tenha saldo suficiente.")
   }
 
-  Component(product_repository, "Repositório", "Spring Data JPA", "Realiza consultas e inserção de produtos no banco de dados")
-  Component(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza apenas a consulta e atualização do progresso do usuário no banco de dados")
+  Component(product_repository, "Repositório", "Spring Data JPA", "Realiza consultas e inserções de produtos no banco de dados.")
+  Component(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza apenas a consulta e atualização do progresso do usuário no banco de dados.")
 }
 
-ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional, porém cada registro tem um atributo 'version' para evitar incosistência ao versionar a API")
-ContainerDb(user_db, "Banco de dados de Usuários", "PostgreSQL", "Banco de dados relacional, para salvar as informações do usuário como nome, e-mail, senha, telefone, cargo e último login para realizar as operações de autenticação e autorização")
+ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional; cada registro possui um atributo 'version' para evitar inconsistências ao versionar a API.")
 
-Rel(security_module, product_api, "Faz requisição")
-Rel(product_api, product_service, "Usa")
+Rel(security_module, product_api, "Envia requisições")
+Rel(product_api, product_service, "Utiliza")
 Rel(product_service, product_use_cases, "Executa")
-Rel(product_service, product_mapper, "Mapeia entidades")
+Rel(product_service, product_mapper, "Realiza mapeamento")
 Rel(list_products_use_case, product_repository, "Consulta produtos")
 Rel(edit_product_use_case, product_repository, "Salva alterações")
 Rel(add_product_use_case, product_repository, "Salva novo produto")
-Rel(product_repository, db, "Usa")
-Rel(buy_product_use_case, user_repository, "Consultado saldo")
+Rel(product_repository, db, "Acessa")
+Rel(buy_product_use_case, user_repository, "Consulta saldo")
 Rel(buy_product_use_case, user_repository, "Atualiza saldo após compra")
-Rel(user_repository, user_db, "Usa")
+Rel(user_repository, db, "Acessa")
 
 @enduml
