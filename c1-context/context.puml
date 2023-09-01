@@ -1,26 +1,26 @@
 @startuml Context
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
-!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
 
 LAYOUT_WITH_LEGEND()
 
-Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 3A")
+Person(user, "Usuário", "Indivíduo interagindo com o aplicativo móvel da 3A.")
 
 System_Boundary(3a, "3A"){
-  System(mobile, "Front-end mobile", "Aplicativo móvel onde o usuário irá usufruir das funcionalidades do sistema")
-  System(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema", $sprite="java")
-  System(ai, "Asset Analysis AI", "Modelo responsável por calcular métricas de investimento e elaborar os relatórios.")
+  System(mobile, "Front-end mobile", "Aplicativo móvel onde os usuários acessam as funcionalidades do sistema.")
+  System(backend, "Back-end", "Servidor responsável por fornecer as funcionalidades e armazenar todas as regras de negócio do sistema.")
+  System(ai, "Asset Analysis AI", "Modelo responsável pelo cálculo de métricas de investimento e geração de relatórios.")
 }
 
 System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
-System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer as informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
-System_Ext(google_finance, "Google Finanças", "Serviço para prover as cotações de ativos da bolsa em tempo real")
+System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
+System_Ext(google_finance, "Google Finanças", "Serviço para prover cotações de ativos da bolsa em tempo real.")
 
 Rel(user, mobile, "Usa")
-BiRel(mobile, backend, "Usa", "JSON/HTTPS")
-Rel(backend, mail, "Envia e-mail de confirmação e redefinição ao usuário")
-Rel(backend, google_finance, "Obtém cotação")
-Rel(backend, ai, "Solicita criação de relatório")
-Rel(ai, backend, "Retorna relatório", "em PDF")
-Rel(ai, yahoo_finance, "Obtêm dados de ativos")
+BiRel(mobile, backend, "  Usa", "JSON/HTTPS")
+Rel(backend, mail, "Envia e-mails de confirmação e redefinição para os usuários")
+Rel(backend, google_finance, "Obtém cotações de ativos")
+Rel(backend, ai, "Solicita a criação de relatórios")
+Rel(ai, backend, "Retorna relatórios", "em formato PDF")
+Rel(ai, yahoo_finance, "Obtém dados de ativos")
+
 @enduml

@@ -8,7 +8,7 @@ O usuário seria uma pessoa que usa o aplicativo 3A em um celular Android ou IOS
 
 1. **Estudante**: o cargo de estudante é o cargo padrão quando um usuário se cadastra no sistema.
 
-2. **Investidor**: quando o usuário completa todos os módulos do curso, é atribuído o cargo de **investidor** e então é possível comprar a inteligência artificial para criação de relatórios customizados (Asset Analysis AI) na loja do aplicativo.
+2. **Investidor**: quando o usuário completa todos os módulos do curso, é atribuído o cargo de **investidor** e então é possível adquirir a inteligência artificial para criação de relatórios customizados (Asset Analysis AI) na loja do aplicativo.
 
 3. **Administrador**: o cargo de administrador é responsável por configurar as recompensas de conclusão de módulos e capítulos, adição de conteúdos no curso e prestar suporte aos usuários.
 
