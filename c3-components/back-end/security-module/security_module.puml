@@ -2,39 +2,42 @@
 
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
-Person(user, "Usuário", "Pessoa física interagindo com o aplicativo móvel da 3A")
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Usuário", "Indivíduo interagindo com o aplicativo móvel da 3A.")
 
 System_Ext(mail, "Sistema de e-mail", "Sistema de envio de e-mails usando SMTP do Gmail para confirmação de criação de conta e redefinição de senha.")
-ContainerDb(user_db, "Banco de dados de Usuários", "PostgreSQL", "Banco de dados relacional, para salvar as informações do usuário como nome, e-mail, senha, telefone, cargo e último login para realizar as operações de autenticação e autorização")
 
 Boundary(security_module, "Módulo de segurança"){
-  Container(security_api, "API", "Spring Web", "Expoem as informações necessárias do usuário para executar os casos de uso do sistema"){
-    Component(security_filters, "Filtros de Segurança", "Spring Security", "Filtros para autenticação, autorização e outros aspectos de segurança")
-    Component(security_controllers, "Controllers", "Spring MVC", "Controladores que recebem e gerenciam as requisições HTTP")
+  Boundary(security_api, "API", "Fornece as informações necessárias do usuário para o uso no sistema. Além disso, expõe os casos de usos para os componentes externos."){
+    Component(security_filters, "Filtros de Segurança", "Spring Security", "Engloba filtros para autenticação, autorização e outros aspectos relacionados à segurança das requisições.")
+    Component(security_controllers, "Controllers", "Spring MVC", "Controladores que recebem e gerenciam as requisições HTTP relacionadas à autenticação e autorização.")
   }
-  Container(security_service, "Serviço de aplicação", "Spring Framework", "Contêm as regras de aplicação, executa os casos de uso e faz o mapeamento das entidades")
-  Container(report_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
+  Component(security_service, "Serviço de aplicação", "Spring Framework", "Contém as regras de aplicação, executa os casos de uso do sistema e realiza o mapeamento das entidades necessárias para essas operações.")
+  Component(report_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e as entidades de aplicação, ou seja, entre as entidades do banco de dados e as estruturas de dados utilizadas nas operações do sistema.")
 
   Boundary(security_use_cases, "Casos de uso"){
-    Component(login_use_case, "Log-in", "Spring Framework", "Realiza a verificação do e-mail e senha fornecido pelo usuários com os dados salvos no banco de dados")
-    Component(signup_use_case, "Cadastro", "Spring Framework", "Realiza a criação da conta do novo usuário e envia um e-mail para confirmação")
-    Component(reset_pwd_use_case, "Redefinir senha", "Spring Framework", "Verifica se o e-mail solicitado existe no banco de dados e envia um e-mail de redefinição de senha")
+    Component(login_use_case, "Log-in", "Spring Framework", "Realiza a verificação do e-mail e senha fornecidos pelo usuário, comparando-os com os dados armazenados no banco de dados para autenticar o usuário.")
+    Component(signup_use_case, "Cadastro", "Spring Framework", "Executa o processo de criação de uma conta para um novo usuário, além de enviar um e-mail de confirmação.")
+    Component(reset_pwd_use_case, "Redefinir senha", "Spring Framework", "Verifica se o e-mail fornecido existe no banco de dados e, em caso afirmativo, envia um e-mail com um link para redefinir a senha.")
   }
 
-  Container(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza apenas a consulta e atualização das funcionalidades desbloqueadas do usuário no banco de dados")
+  Container(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza operações de consulta e atualização das funcionalidades desbloqueadas do usuário no banco de dados.")
 }
 
+ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional; cada registro possui um atributo 'version' para evitar inconsistências ao versionar a API.")
+
 Rel(user, security_api, "Faz requisição")
-Rel(security_api, security_filters, "Usa")
-Rel(security_api, security_controllers, "Usa")
+Rel(security_api, security_filters, "Utiliza")
+Rel(security_api, security_controllers, "Utiliza")
 Rel(security_filters, security_service, "Filtra requisições")
-Rel(security_service, report_mapper, "Mapeia entidades")
+Rel(security_service, report_mapper, "Realiza o mapeamento de entidades")
 Rel(security_service, security_use_cases, "Executa")
-Rel(user_repository, user_db, "Usa")
+Rel(user_repository, db, "Utiliza")
 Rel(login_use_case, user_repository, "Consulta dados")
 Rel(signup_use_case, user_repository, "Salva dados")
 Rel(signup_use_case, mail, "Envia e-mail de verificação")
-Rel(reset_pwd_use_case, user_repository, "Verifica se usuário existe")
+Rel(reset_pwd_use_case, user_repository, "Verifica se o usuário existe")
 Rel(reset_pwd_use_case, mail, "Envia e-mail de redefinição")
 
 @enduml
