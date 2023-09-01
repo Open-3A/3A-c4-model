@@ -4,19 +4,19 @@
 
 LAYOUT_WITH_LEGEND()
 
-System(backend, "Back-end", "Servidor responsável por prover as funcionalidades e armazena todas as regras de negócio do sistema", $sprite="java")
-System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer as informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
+System(backend, "Back-end", "Servidor responsável por fornecer as funcionalidades e armazenar todas as regras de negócio do sistema.")
+System_Ext(yahoo_finance, "Yahoo Finanças", "Serviço para fornecer informações, indicadores fundamentalistas e notícias de ativos da bolsa de valores.")
 
 Container_Boundary(asset_analysis_ai, "Asset Analysis AI"){
-  Container_Ext(riskfolio_lib, "Riskfolio-Lib", "Python", "Otimização de carteira de investimento e alocação estratégica de ativos")
-  Container(model, "Modelo Value Investing", "Python", "Rede neural responsável por encontrar os melhores parâmetros para o aplicar nas fórmulas de cálculo do valor intrínseco dos ativos. Além de retornar outras métricas fundamentais no value investing.")
-  Container(api, "API", "Python", "API responsável por receber as requisições de outros serviços do sistema e disponibilizar relatórios no formato PDF")
-  Container(b3, "Serviço da B3", "Python", "Obter o códigos dos ativos que compoçem os índices IBOV, IDIV e SMLL da B3.")
-  Container(preprocessing_service, "Serviço de pré-processamento", "Python", "Aplicar o pré-processamento dos dados e realizar a seleção dos ativos para compor a carteira de investimento de acordo com o perfil do investidor")
-  Container(report_service, "Serviço de relatório", "Python / Python-PDFKit", "Criar o relatório com base nos dados do modelo Value Investing no formato PDF.")
+  Container_Ext(riskfolio_lib, "Riskfolio-Lib", "Python", "Biblioteca para otimização de carteira de investimento e alocação estratégica de ativos")
+  Container(model, "Modelo Value Investing", "Python", "Rede neural responsável por encontrar os melhores parâmetros para aplicar nas fórmulas de cálculo do valor intrínseco dos ativos, além de retornar outras métricas fundamentais no value investing.")
+  Container(api, "API", "Python", "API responsável por receber requisições de outros serviços do sistema e disponibilizar relatórios no formato PDF.")
+  Container(b3, "Serviço da B3", "Python", "Serviço para obter códigos dos ativos que compõem os índices IBOV, IDIV e SMLL da B3.")
+  Container(preprocessing_service, "Serviço de pré-processamento", "Python", "Responsável por aplicar o pré-processamento dos dados e realizar a seleção dos ativos para compor a carteira de investimento de acordo com o perfil do investidor.")
+  Container(report_service, "Serviço de relatório", "Python / Python-PDFKit", "Criação de relatórios com base nos dados do modelo Value Investing no formato PDF.")
 }
 
-Rel(b3, preprocessing_service, "Códigos dos ativos")
+Rel(b3, preprocessing_service, "Obtém códigos dos ativos")
 Rel(preprocessing_service, riskfolio_lib, "Envio dos ativos")
 Rel(riskfolio_lib, preprocessing_service, "Carteira de investimento otimizada")
 Rel(yahoo_finance, preprocessing_service, "Coleta dos dados financeiros")
@@ -25,6 +25,7 @@ Rel(model, report_service, "Envio dos dados de cada ativo em carteira")
 Rel(yahoo_finance, report_service, "Coleta das cotações dos principais índices e moedas estrangeiras")
 Rel(report_service, api, "Relatório em PDF")
 Rel(api, backend, "Envio do relatório em PDF", "HTTPS/Event Stream")
+Rel(api, preprocessing_service, "Envio do perfil do investidor")
 Rel(backend, api, "Solicitação de relatório", "HTTPS/JSON")
 
 @enduml
