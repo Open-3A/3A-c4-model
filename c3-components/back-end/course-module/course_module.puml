@@ -4,47 +4,46 @@
 
 LAYOUT_WITH_LEGEND()
 
-Container(security_module, "Módulo de segurança", "Java / Spring Security", "Módulo para realizar a autenticação de usuários e autorização por meio de JWT")
+Container(security_module, "Módulo de segurança", "Java / Spring Security", "Responsável pela autenticação e autorização de usuários via JWT.")
 
 Boundary(course_module, "Módulo de curso", "Java"){
-  Component(course_api, "API", "Spring Web", "Disponibiliza as informações dos módulos e capítulos via API Rest")
-  Component(course_service, "Serviço de aplicação", "Spring Framework", "Contêm as regras de aplicação, executa os casos de uso e faz o mapeamento das entidades")
-  Component(course_mapper, "Mapeador", "MapStruct", "Realiza o mapeamento entre as entidades de domínio e de aplicação (DataBase Entity e DTO)")
+  Component(course_api, "API", "Spring Web", "Fornece informações dos módulos e capítulos via API REST.")
+  Component(course_service, "Serviço de aplicação", "Spring Framework", "Contém regras de aplicação, executa casos de uso e realiza mapeamento de entidades.")
+  Component(course_mapper, "Mapeador", "MapStruct", "Efetua mapeamento entre entidades de domínio e de aplicação (DataBase Entity e DTO).")
 
   Boundary(course_uses_cases, "Casos de uso"){
-    Component(get_user_progress_use_case, "Obter progresso de usuário", "Spring Framework", "Obter o progresso de um determinado usuário")
-    Component(get_course_content_use_case, "Obter o conteúdo do curso", "Spring Framefork / Spring HATEOAS", "Obter todos os módulos e seus repectivos capítulos com paginação")
-    Component(get_chapter_to_continue_use_case, "Obter capítulo em andamento", "Spring Framefork", "Obter o capítulo no qual o usuário estava lendo ou ia começar a ler")
-    Component(finish_reading_use_case, "Concluir leitura", "Spring Framework", "Após concluir a leitura de um capítulo, será atualizado o progresso e o último capítulo lido")
+    Component(get_user_progress_use_case, "Obter progresso do usuário", "Spring Framework", "Recupera o progresso de um usuário específico.")
+    Component(get_course_content_use_case, "Obter conteúdo do curso", "Spring Framework / Spring HATEOAS", "Obtém todos os módulos e seus capítulos correspondentes com paginação.")
+    Component(get_chapter_to_continue_use_case, "Obter capítulo em andamento", "Spring Framework", "Localiza o capítulo no qual o usuário estava lendo ou prestes a começar.")
+    Component(finish_reading_use_case, "Concluir leitura", "Spring Framework", "Atualiza o progresso e o último capítulo lido após a conclusão da leitura.")
 
-    Boundary(only_admins, "Apenas adminstradores"){
-      Component(add_course_module_use_case, "Adicionar módulo", "Spring Framework", "Salvar novo módulo do curso no banco de dados")
-      Component(add_chapter_use_case, "Adicionar capítulo", "Spring Framework", "Salvar novo capítulo de um determinado módulo no banco de dados")
-      Component(edit_module_use_case, "Editar módulo", "Spring Framework", "Edição total ou parcial nas informações do módulo")
-      Component(edit_chapter_use_case, "Editar capítulo", "Spring Framework", "Edição total ou parcial nas informações do capítulo")
+    Boundary(only_admins, "Somente administradores"){
+      Component(add_course_module_use_case, "Adicionar módulo", "Spring Framework", "Salva um novo módulo de curso no banco de dados.")
+      Component(add_chapter_use_case, "Adicionar capítulo", "Spring Framework", "Armazena um novo capítulo em um módulo específico no banco de dados.")
+      Component(edit_module_use_case, "Editar módulo", "Spring Framework", "Realiza uma edição completa ou parcial nas informações do módulo.")
+      Component(edit_chapter_use_case, "Editar capítulo", "Spring Framework", "Efetua uma edição completa ou parcial nas informações do capítulo.")
     }
   }
 
-  Component(course_repository, "Repositório de curso", "Spring Data JPA", "Realiza consultas e inserções de conteúdos no banco de dados")
-  Component(user_repository, "Repositório de usuário", "Spring Data JPA", "Realiza apenas a consulta e atualização do progresso do usuário no banco de dados")
+  Component(course_repository, "Repositório de curso", "Spring Data JPA", "Realiza consultas e inserções de conteúdo no banco de dados.")
+  Component(user_repository, "Repositório de usuário", "Spring Data JPA", "Efetua apenas consultas e atualizações no progresso do usuário no banco de dados.")
 }
 
-ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional, porém cada registro tem um atributo 'version' para evitar incosistência ao versionar a API")
-ContainerDb(user_db, "Banco de dados de Usuários", "PostgreSQL", "Banco de dados relacional, para salvar as informações do usuário como nome, e-mail, senha, telefone, cargo e último login para realizar as operações de autenticação e autorização")
+ContainerDb(db, "Banco de dados", "MongoDB", "Banco de dados não relacional; cada registro possui um atributo 'version' para evitar inconsistências ao versionar a API.")
 
-Rel(security_module, course_api, "Faz requisição", "com JWT")
-Rel(course_api, course_service, "Usa")
+Rel(security_module, course_api, "Envia requisições", "usando JWT")
+Rel(course_api, course_service, "Utiliza")
 Rel(course_service, course_uses_cases, "Executa")
-Rel(course_service, course_mapper, "Mapeia entidades")
+Rel(course_service, course_mapper, "Realiza mapeamento")
 Rel(get_course_content_use_case, course_repository, "Consulta dados")
-Rel(course_repository, db, "Usa")
-Rel(get_user_progress_use_case, user_repository, "Obtém progresso")
-Rel(get_chapter_to_continue_use_case, user_repository, "Obtém capítulo")
+Rel(course_repository, db, "Acessa")
+Rel(get_user_progress_use_case, user_repository, "Recupera progresso")
+Rel(get_chapter_to_continue_use_case, user_repository, "Recupera capítulo")
 Rel(add_course_module_use_case, course_repository, "Salva módulo")
 Rel(add_chapter_use_case, course_repository, "Salva capítulo")
-Rel(edit_module_use_case, course_repository, "Salvar alterações")
-Rel(edit_chapter_use_case, course_repository, "Salvar alterações")
+Rel(edit_module_use_case, course_repository, "Salva alterações")
+Rel(edit_chapter_use_case, course_repository, "Salva alterações")
 Rel(finish_reading_use_case, user_repository, "Atualiza informações")
-Rel(user_repository, user_db, "Usa")
+Rel(user_repository, db, "Acessa")
 
 @enduml
