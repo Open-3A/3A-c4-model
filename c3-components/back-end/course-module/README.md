@@ -2,6 +2,98 @@
 
 ![](./Course%20Module.svg)
 
+## Entidades
+
+### Course
+
+```mermaid
+classDiagram
+    Module --> Identifier
+    Module --> Chapter
+
+    class Identifier {
+        - String value
+        + create() Identifier
+    }
+
+    class Module {
+        - Identifier id
+        - String title
+        - String description
+        - LinkedList~Chapter~ chapters
+
+        + Module(Identifier id, String title, String description, LinkedList<Chapter> chapters) Module
+        + exists(String chapterTitle) boolean
+        + getPosition(String chapterTitle) int
+        + add(int position, Chapter newChapter) void
+        + edit(String title, Chapter updatedChapter) void
+        + remove(String title) void
+        + getNumberOfChapters() int
+    }
+
+    class Chapter {
+        - Identifier id
+        - String title
+        - String description
+        - File contentInPDF
+
+        + Chapter(Identifier id, String title, String description, File contentInPDF) Chapter
+    }
+```
+
+A entidade `Module` é responsável por gerenciar o conteúdo e cronologia dos capítulos, por isso foi adotado a estrutura `LinkedList` do Java para garantir a ordem dos capítulos de cada módulo.
+
+### User
+
+```mermaid
+classDiagram
+    CourseUser --> Identifier
+    CourseUser --> Progress
+    ChapterStatus --> Status
+
+    class Identifier {
+        - String value
+        + create() Identifier
+    }
+
+    class Progress {
+        - int completedChapters
+        - int totalChapters
+    }
+
+    class CourseUser {
+        - Identifier id
+        - List~ChapterStatus~ completedChapters
+        - ChapterStatus chapterInProgress
+
+        + CourseUser(Identifier id, List<ChapterStatus> completedChapters, ChapterStatus chapterInProgress) CourseUser
+        + finishReading(Identifier nextChapter) void
+        + getUserProgress() Progress
+    }
+
+    class Status {
+        <<Enumerante>>
+        BLOCKED
+        TO_CONTINUE
+        COMPLETED
+    }
+
+    class ChapterStatus {
+        - Identifier chapterReference
+        - Status status
+
+        + ChapterStatus(Identifier chapterReference, Status status) ChapterStatus
+        + isToContinue() boolean
+        + isCompleted() boolean
+        + markAsToContinue() void
+        + markAsCompleted() void
+    }
+```
+
+A entidade `CourseUser` tem a função de apenas armazenar as informações do usuários relacionadas os curso, por exemplo, o capítulo em andamento, status de leitura de cada capítulo e progresso. Os capítulos concluídos são armazenados em uma lista denotado de `completedChapters` e nesse caso a ordem dos capítulos e os módulos são irrelevantes uma vez que são responsabilidade da entidade `Module`, pois isso foi adotado a estrutura `List` e não `LinkedList` no atributo `completedChapters`. Já o capítulo em andamento é armazenado em um atributo a parte já que é necessários aplicar regras específicas nele, como por exemplo ao concluir a leitura, com isso caso fosse inserido juntamente com os capítulos concluídos seria necessários utilizar uma estrutura de dados mais complexa como um `Map` ou fazer um `for` em tais situações. Por fim, os capítulos com status `BLOCKED` não são relevantes para serem armazenados, pois por ser o status padrão não teria sentido em armazená-los no banco de dados uma vez que podem ser subtendidos nos casos de uso.
+
+O racional por trás dessa divisão entre `Course` e `User` foi necessário uma vez que não seria performático replicar todo o conteúdo do curso para armazenar as informações individuais dos usuários, como status de leitura.
+
 ## Caso de usos
 
 ### Obter progresso do usuário
